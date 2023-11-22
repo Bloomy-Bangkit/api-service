@@ -21,8 +21,7 @@ const register = async(req, request) => {
     validateRequest.password = await bcrypt.hash(validateRequest.password, 10)
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
     const jwtVerifikasiAkun = jwt.sign({ email: validateRequest.email }, SECRET_KEY, { expiresIn: '5m' })
-    console.log({ protocol: req.protocol })
-    const link = `${req.protocol}://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
+    const link = `${req.protocol}s://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
     const statusSendEmail = await sendEmailVerify(validateRequest.email, link)
     if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
     const userCreated = await User.create({
@@ -68,7 +67,9 @@ const login = async request => {
 }
 
 const verify = async request => {
+    console.log(request)
     const validateToken = validate(authValidation.tokenValidation, request)
+    console.log({ validateToken })
     const user = await verifyToken(validateToken)
     const email = user.email
     const [numberOfAffectedRows, [updatedUser]] = await User.update({ actived: true, updatedAt: new Date() }, {
