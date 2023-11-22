@@ -70,7 +70,6 @@ const postProduct = async(username, request) => {
         price: productCreated.price,
         weight: productCreated.weight
     }
-
 }
 
 const updateProduct = async(myUsername, idProduct, request) => {
