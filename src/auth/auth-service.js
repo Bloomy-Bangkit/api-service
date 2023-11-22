@@ -49,21 +49,19 @@ const login = async request => {
     const validateRequest = validate(authValidation.loginValidation, request)
     const isEmail = validator.isEmail(validateRequest.email)
     if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
-    const user = await User.findOne({ where: { email: validateRequest.email } }, { attributes: ['email', 'username', 'password'] })
-    if (!user) throw new ResponseError(400, 'Email dan Password salah')
-    if (!user.actived) throw new ResponseError(400, 'User belum diverifikasi, silahkan cek email!')
-    const matchPassword = await bcrypt.compare(validateRequest.password, user.password)
+    const searchUser = await User.findOne({ where: { email: validateRequest.email } })
+    if (!searchUser) throw new ResponseError(400, 'Email dan Password salah')
+    const { email, password, actived } = searchUser.dataValues
+    if (!actived) throw new ResponseError(400, 'User belum diverifikasi, silahkan cek email!')
+    const matchPassword = await bcrypt.compare(validateRequest.password, password)
     if (!matchPassword) throw new ResponseError(400, 'Email dan Password salah')
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const token = jwt.sign(user, SECRET_KEY, { expiresIn: '3d' })
-    const [numberOfAffectedRows, [updatedUser]] = await User.update({ token }, {
-        where: { email: user.email },
-        returning: true,
-        plain: true,
-        attributes: ['token']
-    })
-    if (numberOfAffectedRows === 0) throw new ResponseError(400, 'Update user gagal')
-    return updatedUser
+    const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '3d' })
+    searchUser.token = token
+    searchUser.updatedAt = new Date()
+    const updatedUser = await searchUser.save()
+    if (!updatedUser) throw new ResponseError(400, 'Updated gagal')
+    return { token }
 }
 
 const verify = async request => {
@@ -71,7 +69,7 @@ const verify = async request => {
     const user = await verifyToken(validateToken)
     const email = user.email
     let searchUser = await User.findOne({ where: { email } })
-    if (!searchUser) throw new ResponseError(400, 'User tidak adal')
+    if (!searchUser) throw new ResponseError(400, 'User tidak ada')
     searchUser.actived = true
     searchUser.updatedAt = new Date()
     const updatedUser = await searchUser.save()
