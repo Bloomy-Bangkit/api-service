@@ -1,14 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize')
-const dotenv = require('dotenv')
-
-dotenv.config()
-
-const DB_HOST = process.env.DB_HOST
-const DB_USER = process.env.DB_USER
-const DB_PASS = process.env.DB_PASS
-const DB_NAME = process.env.DB_NAME
-
-const sequelize = new Sequelize(`mysql://${DB_USER}:${DB_PASS}@${DB_HOST}:3306/${DB_NAME}`)
+const sequelize = require('../application/sequelize.js')
 
 const User = sequelize.define('user', {
     email: {
@@ -63,9 +54,5 @@ const User = sequelize.define('user', {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
     }
 }, { sequelize, modelName: 'user' })
-
-sequelize.sync({ force: false })
-    .then(() => console.log('Auth models synchronized with the Database!'))
-    .catch(error => console.error(`ERROR synchronizing Auth models: ${error}`))
 
 module.exports = User
