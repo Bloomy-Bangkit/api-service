@@ -10,7 +10,7 @@ productRoute.get('/product', authenticateToken, productController.getProduct, er
 productRoute.get('/product/me', authenticateToken, productController.getMyProduct, errorMiddleware)
 
 productRoute.post('/product', authenticateToken, productController.postProduct, errorMiddleware)
-productRoute.put('/product/:id', authenticateToken, productController.putProduct, errorMiddleware)
+productRoute.put('/product/:id', authenticateToken, productController.updateProduct, errorMiddleware)
 productRoute.delete('/product/:id', authenticateToken, productController.deleteProduct, errorMiddleware)
 
 module.exports = productRoute

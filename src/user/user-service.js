@@ -5,14 +5,21 @@ const userValidation = require('./user-validation.js')
 const ResponseError = require('../error/response-error.js')
 const User = require('./user-model.js')
 
-const getUsers = async username => {
-    const validEmail = validate(userValidation.usernameValidation, username)
-
+const getUsers = async myUsername => {
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    const searchUser = await User.findOne({ where: { username: validMyUsername } })
+    if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
+    const searchAllUser = await User.findAll({
+        attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'photo', 'description']
+    })
+    if (searchAllUser.length === 0) throw new ResponseError(404, 'Users tidak ada')
+    return searchAllUser
 }
 
-const getUser = async(username, queryUsername) => {
+const getUser = async(myUsername, username) => {
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
     const validUsername = validate(userValidation.usernameValidation, username)
-    const searchUser = await User.findOne({ where: { username: validUsername } })
+    const searchUser = await User.findOne({ where: { username: validMyUsername } })
     if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
     const searchOtherUser = await User.findOne({ where: { username: validUsername } })
     if (!searchOtherUser) throw new ResponseError(404, 'User yang dicari tidak ada')
@@ -27,9 +34,9 @@ const getUser = async(username, queryUsername) => {
     }
 }
 
-const getMyUser = async username => {
-    const validUsername = validate(userValidation.usernameValidation, username)
-    const searchUser = await User.findOne({ where: { username: validUsername } })
+const getMyUser = async myUsername => {
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    const searchUser = await User.findOne({ where: { username: validMyUsername } })
     if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
     return {
         email: searchUser.dataValues.email,
@@ -43,12 +50,10 @@ const getMyUser = async username => {
     }
 }
 
-const updateUser = async(email, request) => {
-    const validEmail = validate(userValidation.emailValidation, email)
+const updateUser = async(myUsername, request) => {
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
     const validRequest = validate(userValidation.updateUserValidation, request)
-    const isEmail = validator.isEmail(validEmail)
-    if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
-    const searchUser = await User.findOne({ where: { email: validEmail } })
+    const searchUser = await User.findOne({ where: { username: validMyUsername } })
     searchUser.nama = validRequest.nama
     searchUser.nohp = validRequest.nohp
     searchUser.alamat = validRequest.alamat
@@ -57,24 +62,22 @@ const updateUser = async(email, request) => {
     const updatedUser = await searchUser.save()
     if (!updatedUser) throw new ResponseError(400, 'Update user gagal')
     return {
-        email: searchUser.email,
-        username: searchUser.username,
-        actived: searchUser.actived,
-        nama: searchUser.nama,
-        nohp: searchUser.nohp,
-        alamat: searchUser.alamat,
-        description: searchUser.description,
+        username: updatedUser.dataValues.username,
+        actived: updatedUser.dataValues.actived,
+        nama: updatedUser.dataValues.nama,
+        nohp: updatedUser.dataValues.nohp,
+        alamat: updatedUser.dataValues.alamat,
+        description: updatedUser.dataValues.description,
     }
 }
 
-const updatePassword = async(email, request) => {
-    const validEmail = validate(userValidation.emailValidation, email)
+const updatePassword = async(myUsername, request) => {
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
     const validRequest = validate(userValidation.updatePasswordValidation, request)
-    const isEmail = validator.isEmail(validEmail)
-    if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
     const matchPassword = validRequest.newPassword === validRequest.confirmNewPassword
     if (!matchPassword) throw new ResponseError(400, 'Password salah')
-    const searchUser = await User.findOne({ where: { email: validEmail } })
+    const searchUser = await User.findOne({ where: { username: validMyUsername } })
+    if (!searchUser) throw new ResponseError(400, 'User tidak ditemukan')
     const checkPasswordUser = await bcrypt.compare(validRequest.oldPassword, searchUser.dataValues.password)
     if (!checkPasswordUser) throw new ResponseError(400, 'Password salah')
     searchUser.password = await bcrypt.hash(validRequest.newPassword, 10)
@@ -82,11 +85,11 @@ const updatePassword = async(email, request) => {
     const updatedUser = await searchUser.save()
     if (!updatedUser) throw new ResponseError(400, 'Update password gagal')
     return {
-        email: searchUser.dataValues.email
+        username: updatedUser.dataValues.username
     }
 }
 
-const updatePhoto = async(email, req) => {}
+const updatePhoto = async myUsername => {}
 
 module.exports = {
     getUsers,

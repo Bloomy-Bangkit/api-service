@@ -12,6 +12,7 @@ const app = express()
 modelSync([sequelize, User, Product], false)
 
 app.use(express.json())
+
 app.use('/auth', authRoute)
 app.use(userRoute)
 app.use(productRoute)
