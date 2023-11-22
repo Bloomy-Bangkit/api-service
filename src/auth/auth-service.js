@@ -33,7 +33,7 @@ const register = async(req, request) => {
         nama: '',
         nohp: '',
         alamat: '',
-        photo: 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/default-profile.png',
+        photo: 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/user/default-profile.png',
         description: ''
     })
     if (!userCreated) throw new ResponseError(400, 'Registrasi gagal')
@@ -51,12 +51,12 @@ const login = async request => {
     if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
     const searchUser = await User.findOne({ where: { email: validateRequest.email } })
     if (!searchUser) throw new ResponseError(400, 'Email dan Password salah')
-    const { email, password, actived } = searchUser.dataValues
+    const { username, password, actived } = searchUser.dataValues
     if (!actived) throw new ResponseError(400, 'User belum diverifikasi, silahkan cek email!')
     const matchPassword = await bcrypt.compare(validateRequest.password, password)
     if (!matchPassword) throw new ResponseError(400, 'Email dan Password salah')
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '3d' })
+    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '3d' })
     searchUser.token = token
     searchUser.updatedAt = new Date()
     const updatedUser = await searchUser.save()

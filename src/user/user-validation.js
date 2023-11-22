@@ -11,7 +11,7 @@ const updateUserValidation = Joi.object({
 
 const updatePasswordValidation = Joi.object({
     oldPassword: Joi.string().max(255).required(),
-    newPassword: Joi.string().max(16).required(),
+    newPassword: Joi.string().max(255).required(),
     confirmNewPassword: Joi.string().max(255).required()
 })
 

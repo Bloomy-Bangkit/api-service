@@ -5,7 +5,11 @@ const userValidation = require('./user-validation.js')
 const ResponseError = require('../error/response-error.js')
 const User = require('./user-model.js')
 
-const getUser = async request => {
+const getUsers = async(email, request) => {}
+
+const getUser = async(email, request) => {}
+
+const getMyUser = async request => {
     const email = validate(userValidation.emailValidation, request)
     const isEmail = validator.isEmail(email)
     if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
@@ -69,7 +73,9 @@ const updatePassword = async(email, request) => {
 const updatePhoto = async(email, req) => {}
 
 module.exports = {
+    getUsers,
     getUser,
+    getMyUser,
     updateUser,
     updatePassword,
     updatePhoto
