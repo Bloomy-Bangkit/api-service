@@ -1,4 +1,5 @@
 const productService = require('./product-service.js')
+const ResponseError = require('../error/response-error.js')
 
 const getProducts = async(req, res, next) => {
     try {
@@ -15,14 +16,13 @@ const getProduct = async(req, res, next) => {
         const email = req.email
         const { username, id } = req.query
         if (username) {
-            const result = await productService.getProduct(email)
+            const result = await productService.getProductByUsername(email)
             res.status(200).json({ message: 'Get product by username berhasil', data: result, username })
         } else if (id) {
-            const result = await productService.getProduct(email)
+            const result = await productService.getProductById(email)
             res.status(200).json({ message: 'Get product by id berhasil', data: result, id })
         } else {
-            const result = await productService.getProduct(email)
-            res.status(200).json({ message: 'Get product berhasil', data: result })
+            throw new ResponseError(400, 'Query username atau id dibutuhkan')
         }
     } catch (error) {
         next(error)

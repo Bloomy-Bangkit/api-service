@@ -5,16 +5,33 @@ const userValidation = require('./user-validation.js')
 const ResponseError = require('../error/response-error.js')
 const User = require('./user-model.js')
 
-const getUsers = async(email, request) => {}
+const getUsers = async username => {
+    const validEmail = validate(userValidation.usernameValidation, username)
 
-const getUser = async(email, request) => {}
+}
 
-const getMyUser = async request => {
-    const email = validate(userValidation.emailValidation, request)
-    const isEmail = validator.isEmail(email)
-    if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
-    const searchUser = await User.findOne({ where: { email } })
-    const user = {
+const getUser = async(username, queryUsername) => {
+    const validUsername = validate(userValidation.usernameValidation, username)
+    const searchUser = await User.findOne({ where: { username: validUsername } })
+    if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
+    const searchOtherUser = await User.findOne({ where: { username: validUsername } })
+    if (!searchOtherUser) throw new ResponseError(404, 'User yang dicari tidak ada')
+    return {
+        username: searchOtherUser.dataValues.username,
+        actived: searchOtherUser.dataValues.actived,
+        nama: searchOtherUser.dataValues.nama,
+        nohp: searchOtherUser.dataValues.nohp,
+        alamat: searchOtherUser.dataValues.alamat,
+        photo: searchOtherUser.dataValues.photo,
+        description: searchOtherUser.dataValues.description,
+    }
+}
+
+const getMyUser = async username => {
+    const validUsername = validate(userValidation.usernameValidation, username)
+    const searchUser = await User.findOne({ where: { username: validUsername } })
+    if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
+    return {
         email: searchUser.dataValues.email,
         username: searchUser.dataValues.username,
         actived: searchUser.dataValues.actived,
@@ -24,7 +41,6 @@ const getMyUser = async request => {
         photo: searchUser.dataValues.photo,
         description: searchUser.dataValues.description,
     }
-    return user
 }
 
 const updateUser = async(email, request) => {

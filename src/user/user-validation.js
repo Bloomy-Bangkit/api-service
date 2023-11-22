@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const emailValidation = Joi.string().max(255).required()
+const usernameValidation = Joi.string().max(255).required()
 
 const updateUserValidation = Joi.object({
     nama: Joi.string().max(255).optional().allow(''),
@@ -16,7 +16,7 @@ const updatePasswordValidation = Joi.object({
 })
 
 module.exports = {
-    emailValidation,
+    usernameValidation,
     updateUserValidation,
     updatePasswordValidation
 }

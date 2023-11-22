@@ -7,7 +7,7 @@ const authenticateToken = (req, res, next) => {
     if (token == null) throw new ResponseError(401, 'Token invalid')
     jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
         if (error) throw new ResponseError(401, 'Token expired')
-        req.email = decoded.email
+        req.username = decoded.username
         next()
     })
 }

@@ -3,8 +3,8 @@ const ResponseError = require('../error/response-error.js')
 
 const getUsers = async(req, res, next) => {
     try {
-        const email = req.email
-        const result = await userService.getUsers(email)
+        const username = req.username
+        const result = await userService.getUsers(username)
         res.status(200).json({ message: 'Get users berhasil', data: result })
     } catch (error) {
         next(error)
@@ -13,11 +13,11 @@ const getUsers = async(req, res, next) => {
 
 const getUser = async(req, res, next) => {
     try {
-        const email = req.email
-        const username = req.query.username
-        if (!username) throw new ResponseError(400, 'Query username dibutuhkan')
-        const result = await userService.getUser(email)
-        res.status(200).json({ message: 'Get user by username berhasil', data: result, username })
+        const username = req.username
+        const queryUsername = req.query.username
+        if (!queryUsername) throw new ResponseError(400, 'Query username dibutuhkan')
+        const result = await userService.getUser(username, queryUsername)
+        res.status(200).json({ message: 'Get user by username berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -25,8 +25,8 @@ const getUser = async(req, res, next) => {
 
 const getMyUser = async(req, res, next) => {
     try {
-        const email = req.email
-        const result = await userService.getMyUser(email)
+        const username = req.username
+        const result = await userService.getMyUser(username)
         res.status(200).json({ message: 'Get my user berhasil', data: result })
     } catch (error) {
         next(error)
@@ -35,8 +35,8 @@ const getMyUser = async(req, res, next) => {
 
 const updateUser = async(req, res, next) => {
     try {
-        const email = req.email
-        const result = await userService.updateUser(email, req.body)
+        const username = req.username
+        const result = await userService.updateUser(username, req.body)
         res.status(200).json({ message: 'Update user berhasil', data: result })
     } catch (error) {
         next(error)
@@ -45,8 +45,8 @@ const updateUser = async(req, res, next) => {
 
 const updatePassword = async(req, res, next) => {
     try {
-        const email = req.email
-        const result = await userService.updatePassword(email, req.body)
+        const username = req.username
+        const result = await userService.updatePassword(username, req.body)
         res.status(200).json({ message: 'Change password berhasil', data: result })
     } catch (error) {
         next(error)
@@ -55,8 +55,8 @@ const updatePassword = async(req, res, next) => {
 
 const updatePhoto = async(req, res, next) => {
     try {
-        const email = req.email
-        res.status(200).json({ message: 'Change password berhasil', data: email })
+        const username = req.username
+        res.status(200).json({ message: 'Change password berhasil', data: username })
     } catch (error) {
         next(error)
     }
