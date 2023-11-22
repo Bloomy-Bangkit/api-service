@@ -67,19 +67,20 @@ const login = async request => {
 }
 
 const verify = async request => {
-    console.log(request)
     const validateToken = validate(authValidation.tokenValidation, request)
-    console.log({ validateToken })
     const user = await verifyToken(validateToken)
+    console.log({ user })
     const email = user.email
-    const [numberOfAffectedRows, [updatedUser]] = await User.update({ actived: true, updatedAt: new Date() }, {
-        where: { email },
-        returning: true,
-        plain: true,
-        attributes: ['email', 'username', 'actived']
-    })
-    if (numberOfAffectedRows === 0) throw new ResponseError(400, 'Update user gagal')
-    return updatedUser
+    let searchUser = await User.findOne({ where: { email } })
+    if (!searchUser) throw new ResponseError(400, 'User tidak adal')
+    searchUser.actived = true
+    searchUser.updatedAt = new Date()
+    const updatedUser = await searchUser.save()
+    return {
+        email: updatedUser.dataValues.email,
+        username: updatedUser.dataValues.username,
+        actived: updatedUser.dataValues.actived
+    }
 }
 
 module.exports = {
