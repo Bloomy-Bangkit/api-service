@@ -33,7 +33,7 @@ const register = async(req, request) => {
         nama: '',
         nohp: '',
         alamat: '',
-        photo: '',
+        photo: `https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/default-profile.png`,
         description: ''
     }, { attributes: ['email', 'username', 'password'] })
     if (!userCreated) throw new ResponseError(400, 'Registrasi gagal')
@@ -69,7 +69,6 @@ const login = async request => {
 const verify = async request => {
     const validateToken = validate(authValidation.tokenValidation, request)
     const user = await verifyToken(validateToken)
-    console.log({ user })
     const email = user.email
     let searchUser = await User.findOne({ where: { email } })
     if (!searchUser) throw new ResponseError(400, 'User tidak adal')
