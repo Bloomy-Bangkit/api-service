@@ -6,7 +6,7 @@ const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const sendEmailVerify = require('../utils/nodemailer.js')
 const verifyToken = require('../utils/verifyToken.js')
-const User = require('./auth-model.js')
+const User = require('../user/user-model.js')
 
 const register = async(req, request) => {
     const validateRequest = validate(authValidation.registerValidation, request)
@@ -33,9 +33,9 @@ const register = async(req, request) => {
         nama: '',
         nohp: '',
         alamat: '',
-        photo: `https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/default-profile.png`,
+        photo: 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/default-profile.png',
         description: ''
-    }, { attributes: ['email', 'username', 'password'] })
+    })
     if (!userCreated) throw new ResponseError(400, 'Registrasi gagal')
     return {
         email: userCreated.email,

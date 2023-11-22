@@ -65,7 +65,7 @@ const User = sequelize.define('user', {
 }, { sequelize, modelName: 'user' })
 
 sequelize.sync({ force: false })
-    .then(() => console.log('Auth models synchronized with the Database!'))
-    .catch(error => console.error(`ERROR synchronizing Auth models: ${error}`))
+    .then(() => console.log('User models synchronized with the Database!'))
+    .catch(error => console.error(`ERROR synchronizing User models: ${error}`))
 
 module.exports = User
