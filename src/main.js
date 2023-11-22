@@ -1,17 +1,13 @@
-import dotenv from 'dotenv'
-import express from 'express'
-import connection from './application/connection.js'
+const dotenv = require('dotenv')
+const app = require('./application/server.js')
+const logger = require('./application/logging.js')
+const connection = require('./application/connection.js')
 
 dotenv.config()
 
-const app = express()
 const PORT = process.env.PORT || 8080
 
-connection()
-
-app.get('/', (req, res) => res.send('Hello World!'))
-app.get('/database', (req, res) => res.send(connection()))
-
 app.listen(PORT, () => {
-    console.log(`App is running at: http://localhost:${PORT}`)
+    logger.info(`App is running at port: ${PORT}`)
+    connection()
 })

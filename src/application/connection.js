@@ -1,12 +1,13 @@
-import database from './database.js'
+const database = require('./database.js')
+const logger = require('./logging.js')
 
 const connection = async() => {
     try {
         database.authenticate
-        console.log('Database terhubung')
+        logger.info('Database terhubung')
     } catch (error) {
-        console.log(`Database gagal terhubung, error: ${error.message}`)
+        logger.error(`Database gagal terhubung, error: ${error.message}`)
     }
 }
 
-export default connection
+module.exports = connection
