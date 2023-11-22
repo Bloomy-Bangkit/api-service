@@ -21,7 +21,8 @@ const register = async(req, request) => {
     validateRequest.password = await bcrypt.hash(validateRequest.password, 10)
     console.log({ validateRequest })
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const jwtVerifikasiAkun = jwt.sign({ email: validateRequest.email }, SECRET_KEY, { expiresIn: '50m' })
+    const jwtVerifikasiAkun = jwt.sign({ email: validateRequest.email }, SECRET_KEY, { expiresIn: '5m' })
+    console.log({ protocol: req.protocol })
     const link = `${req.protocol}://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
     const statusSendEmail = await sendEmailVerify(validateRequest.email, link)
     if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
