@@ -1,15 +1,15 @@
 const express = require('express')
 const sequelize = require('./sequelize.js')
+const User = require('../user/user-model.js')
+const Product = require('../product/product-model.js')
+const modelSync = require('../utils/modelSync.js')
 const authRoute = require('../auth/auth-route.js')
 const userRoute = require('../user/user-route.js')
 const productRoute = require('../product/product-route.js')
 
 const app = express()
 
-sequelize
-    .sync({ force: false })
-    .then(() => console.log('Models synchronized with the Database!'))
-    .catch(error => console.error(`ERROR synchronizing Models, message: ${error}`))
+modelSync([sequelize, User, Product], false)
 
 app.use(express.json())
 app.use('/auth', authRoute)
