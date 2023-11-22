@@ -19,7 +19,6 @@ const register = async(req, request) => {
     const checkUsername = await User.count({ where: { username: validateRequest.username } })
     if (checkUsername > 0) throw new ResponseError(400, 'Username sudah digunakan')
     validateRequest.password = await bcrypt.hash(validateRequest.password, 10)
-    console.log({ validateRequest })
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
     const jwtVerifikasiAkun = jwt.sign({ email: validateRequest.email }, SECRET_KEY, { expiresIn: '5m' })
     console.log({ protocol: req.protocol })
