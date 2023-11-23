@@ -5,7 +5,7 @@ const authValidation = require('./auth-validation.js')
 const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const sendEmailVerify = require('../utils/nodemailer.js')
-const verifyToken = require('../utils/verifyToken.js')
+const verifyToken = require('../utils/verify-token.js')
 const User = require('../user/user-model.js')
 
 const register = async(req, request) => {
