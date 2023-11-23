@@ -8,11 +8,9 @@ const userRoute = require('../user/user-route.js')
 const productRoute = require('../product/product-route.js')
 
 const app = express()
-
 modelSync([sequelize, User, Product], false)
 
 app.use(express.json())
-
 app.use('/auth', authRoute)
 app.use(userRoute)
 app.use(productRoute)
