@@ -1,14 +1,12 @@
-const validator = require('validator')
 const bcrypt = require('bcrypt')
 const validate = require('../middleware/validation.js')
 const userValidation = require('./user-validation.js')
 const ResponseError = require('../error/response-error.js')
 const User = require('./user-model.js')
+const checkMyUserAvaiable = '../utils/checkMyUserAvailable.js'
 
 const getUsers = async myUsername => {
-    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
-    const searchUser = await User.findOne({ where: { username: validMyUsername } })
-    if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
+    await checkMyUserAvaiable(false, myUsername)
     const searchAllUser = await User.findAll({
         attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'photo', 'description']
     })
@@ -17,10 +15,8 @@ const getUsers = async myUsername => {
 }
 
 const getUser = async(myUsername, username) => {
-    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    await checkMyUserAvaiable(false, myUsername)
     const validUsername = validate(userValidation.usernameValidation, username)
-    const searchUser = await User.findOne({ where: { username: validMyUsername } })
-    if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
     const searchOtherUser = await User.findOne({ where: { username: validUsername } })
     if (!searchOtherUser) throw new ResponseError(404, 'User yang dicari tidak ada')
     return {
@@ -35,9 +31,7 @@ const getUser = async(myUsername, username) => {
 }
 
 const getMyUser = async myUsername => {
-    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
-    const searchUser = await User.findOne({ where: { username: validMyUsername } })
-    if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
+    const searchUser = await checkMyUserAvaiable(true, myUsername)
     return {
         email: searchUser.dataValues.email,
         username: searchUser.dataValues.username,
@@ -51,9 +45,8 @@ const getMyUser = async myUsername => {
 }
 
 const updateUser = async(myUsername, request) => {
-    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    const searchUser = await checkMyUserAvaiable(true, myUsername)
     const validRequest = validate(userValidation.updateUserValidation, request)
-    const searchUser = await User.findOne({ where: { username: validMyUsername } })
     searchUser.nama = validRequest.nama
     searchUser.nohp = validRequest.nohp
     searchUser.alamat = validRequest.alamat
@@ -72,12 +65,10 @@ const updateUser = async(myUsername, request) => {
 }
 
 const updatePassword = async(myUsername, request) => {
-    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    const searchUser = await checkMyUserAvaiable(true, myUsername)
     const validRequest = validate(userValidation.updatePasswordValidation, request)
     const matchPassword = validRequest.newPassword === validRequest.confirmNewPassword
     if (!matchPassword) throw new ResponseError(400, 'Password salah')
-    const searchUser = await User.findOne({ where: { username: validMyUsername } })
-    if (!searchUser) throw new ResponseError(400, 'User tidak ditemukan')
     const checkPasswordUser = await bcrypt.compare(validRequest.oldPassword, searchUser.dataValues.password)
     if (!checkPasswordUser) throw new ResponseError(400, 'Password salah')
     searchUser.password = await bcrypt.hash(validRequest.newPassword, 10)
