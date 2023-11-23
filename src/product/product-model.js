@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize')
 const sequelize = require('../application/sequelize.js')
+const User = require('../user/user-model.js')
 
 const Product = sequelize.define('product', {
     idProduct: {
@@ -16,17 +17,16 @@ const Product = sequelize.define('product', {
     },
     picture: {
         type: DataTypes.STRING,
-        unique: true,
     },
     nama: {
         type: DataTypes.STRING,
     },
     description: {
         type: DataTypes.STRING,
-        defaultValue: "",
+        defaultValue: '',
     },
     grade: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1),
     },
     price: {
         type: DataTypes.INTEGER,

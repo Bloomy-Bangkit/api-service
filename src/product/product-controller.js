@@ -3,8 +3,8 @@ const ResponseError = require('../error/response-error.js')
 
 const getProducts = async(req, res, next) => {
     try {
-        const email = req.email
-        const result = await productService.getProducts(email)
+        const myUsername = req.username
+        const result = await productService.getProducts(myUsername)
         res.status(200).json({ message: 'Get products berhasil', data: result })
     } catch (error) {
         next(error)
@@ -13,14 +13,15 @@ const getProducts = async(req, res, next) => {
 
 const getProduct = async(req, res, next) => {
     try {
-        const email = req.email
+        const myUsername = req.username
         const { username, id } = req.query
+        console.log({ username, id, myUsername })
         if (username) {
-            const result = await productService.getProductByUsername(email)
-            res.status(200).json({ message: 'Get product by username berhasil', data: result, username })
+            const result = await productService.getProductByUsername(myUsername, username)
+            res.status(200).json({ message: 'Get product by username berhasil', data: result })
         } else if (id) {
-            const result = await productService.getProductById(email)
-            res.status(200).json({ message: 'Get product by id berhasil', data: result, id })
+            const result = await productService.getProductById(myUsername, id)
+            res.status(200).json({ message: 'Get product by id berhasil', data: result })
         } else {
             throw new ResponseError(400, 'Query username atau id dibutuhkan')
         }
@@ -31,9 +32,9 @@ const getProduct = async(req, res, next) => {
 
 const getMyProduct = async(req, res, next) => {
     try {
-        const email = req.email
-        const result = await productService.getMyProduct(email)
-        res.status(200).json({ message: 'Get my product berhasil', data: result, email })
+        const myUsername = req.username
+        const result = await productService.getMyProduct(myUsername)
+        res.status(200).json({ message: 'Get my product berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -41,20 +42,21 @@ const getMyProduct = async(req, res, next) => {
 
 const postProduct = async(req, res, next) => {
     try {
-        const email = req.email
-        const result = await productService.postProduct(email)
+        const myUsername = req.username
+        const result = await productService.postProduct(myUsername, req.body)
         res.status(200).json({ message: 'Post product berhasil', data: result })
     } catch (error) {
         next(error)
     }
 }
 
-const putProduct = async(req, res, next) => {
+const updateProduct = async(req, res, next) => {
     try {
-        const email = req.email
+        const myUsername = req.username
         const idProduct = req.params.id
-        const result = await productService.putProduct(email, idProduct)
-        res.status(200).json({ message: 'Put product berhasil', data: result, idProduct })
+        console.log({ myUsername, idProduct, request: req.body })
+        const result = await productService.updateProduct(myUsername, idProduct, req.body)
+        res.status(200).json({ message: 'Put product berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -62,10 +64,10 @@ const putProduct = async(req, res, next) => {
 
 const deleteProduct = async(req, res, next) => {
     try {
-        const email = req.email
+        const myUsername = req.username
         const idProduct = req.params.id
-        const result = await productService.deleteProduct(email, idProduct)
-        res.status(200).json({ message: 'Delete product berhasil', data: result, idProduct })
+        const result = await productService.deleteProduct(myUsername, idProduct)
+        res.status(200).json({ message: 'Delete product berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -76,6 +78,6 @@ module.exports = {
     getProduct,
     getMyProduct,
     postProduct,
-    putProduct,
+    updateProduct,
     deleteProduct
 }

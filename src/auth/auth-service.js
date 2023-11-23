@@ -5,29 +5,29 @@ const authValidation = require('./auth-validation.js')
 const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const sendEmailVerify = require('../utils/nodemailer.js')
-const verifyToken = require('../utils/verifyToken.js')
+const verifyToken = require('../utils/verify-token.js')
 const User = require('../user/user-model.js')
 
 const register = async(req, request) => {
-    const validateRequest = validate(authValidation.registerValidation, request)
-    const matchPassword = validateRequest.password === validateRequest.confirmPassword ? true : false
+    const validRequest = validate(authValidation.registerValidation, request)
+    const matchPassword = validRequest.password === validRequest.confirmPassword ? true : false
     if (!matchPassword) throw new ResponseError(400, 'Password salah')
-    const isEmail = validator.isEmail(validateRequest.email)
+    const isEmail = validator.isEmail(validRequest.email)
     if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
-    const checkEmail = await User.count({ where: { email: validateRequest.email } })
+    const checkEmail = await User.count({ where: { email: validRequest.email } })
     if (checkEmail > 0) throw new ResponseError(400, 'Email sudah digunakan')
-    const checkUsername = await User.count({ where: { username: validateRequest.username } })
+    const checkUsername = await User.count({ where: { username: validRequest.username } })
     if (checkUsername > 0) throw new ResponseError(400, 'Username sudah digunakan')
-    validateRequest.password = await bcrypt.hash(validateRequest.password, 10)
+    validRequest.password = await bcrypt.hash(validRequest.password, 10)
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const jwtVerifikasiAkun = jwt.sign({ email: validateRequest.email }, SECRET_KEY, { expiresIn: '5m' })
+    const jwtVerifikasiAkun = jwt.sign({ email: validRequest.email }, SECRET_KEY, { expiresIn: '5m' })
     const link = `${req.protocol}s://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
-    const statusSendEmail = await sendEmailVerify(validateRequest.email, link)
+    const statusSendEmail = await sendEmailVerify(validRequest.email, link)
     if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
     const userCreated = await User.create({
-        email: validateRequest.email,
-        username: validateRequest.username,
-        password: validateRequest.password,
+        email: validRequest.email,
+        username: validRequest.username,
+        password: validRequest.password,
         actived: false,
         token: '',
         nama: '',
@@ -41,19 +41,19 @@ const register = async(req, request) => {
         email: userCreated.email,
         username: userCreated.username,
         password: userCreated.password,
-        message: 'Check email untuk verifikasi akun'
+        verify: 'Check email untuk verifikasi akun'
     }
 }
 
 const login = async request => {
-    const validateRequest = validate(authValidation.loginValidation, request)
-    const isEmail = validator.isEmail(validateRequest.email)
+    const validRequest = validate(authValidation.loginValidation, request)
+    const isEmail = validator.isEmail(validRequest.email)
     if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
-    const searchUser = await User.findOne({ where: { email: validateRequest.email } })
+    const searchUser = await User.findOne({ where: { email: validRequest.email } })
     if (!searchUser) throw new ResponseError(400, 'Email dan Password salah')
     const { username, password, actived } = searchUser.dataValues
     if (!actived) throw new ResponseError(400, 'User belum diverifikasi, silahkan cek email!')
-    const matchPassword = await bcrypt.compare(validateRequest.password, password)
+    const matchPassword = await bcrypt.compare(validRequest.password, password)
     if (!matchPassword) throw new ResponseError(400, 'Email dan Password salah')
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
     const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '3d' })
@@ -65,8 +65,8 @@ const login = async request => {
 }
 
 const verify = async request => {
-    const validateToken = validate(authValidation.tokenValidation, request)
-    const user = await verifyToken(validateToken)
+    const validToken = validate(authValidation.tokenValidation, request)
+    const user = await verifyToken(validToken)
     const email = user.email
     let searchUser = await User.findOne({ where: { email } })
     if (!searchUser) throw new ResponseError(400, 'User tidak ada')
