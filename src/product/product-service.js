@@ -1,20 +1,19 @@
 const { v4: uuidv4 } = require('uuid')
-const User = require('../user/user-model.js')
 const Product = require('./product-model.js')
 const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const productValidation = require('./product-validation.js')
-const checkMyUserAvaiable = require('../utils/check-user-available.js')
+const checkUserAvaiable = require('../utils/check-user-available.js')
 
 const getProducts = async myUsername => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const searchProducts = await Product.findAll()
     if (searchProducts.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
     return searchProducts
 }
 
 const getProductByUsername = async(myUsername, username) => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const validUsername = validate(productValidation.usernameValidation, username)
     const searchProductsUser = await Product.findAll({ where: { usernameSeller: validUsername } })
     if (searchProductsUser.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
@@ -22,7 +21,7 @@ const getProductByUsername = async(myUsername, username) => {
 }
 
 const getProductById = async(myUsername, idProduct) => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const validIdProduct = validate(productValidation.idProductValidation, idProduct)
     const searchProduct = await Product.findOne({ where: { idProduct: validIdProduct } })
     if (!searchProduct) throw new ResponseError(404, 'Product tidak ditemukan')
@@ -30,14 +29,14 @@ const getProductById = async(myUsername, idProduct) => {
 }
 
 const getMyProduct = async myUsername => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const searchMyProducts = await Product.findAll({ where: { usernameSeller: myUsername } })
     if (searchMyProducts.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
     return searchMyProducts
 }
 
 const postProduct = async(myUsername, request) => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const validRequest = validate(productValidation.postProductValidation, request)
     const idProduct = uuidv4()
     const productCreated = await Product.create({
@@ -64,7 +63,7 @@ const postProduct = async(myUsername, request) => {
 }
 
 const updateProduct = async(myUsername, idProduct, request) => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const validIdProduct = validate(productValidation.idProductValidation, idProduct)
     const validRequest = validate(productValidation.updateProductValidation, request)
     const searchProduct = await Product.findOne({ where: { idProduct: validIdProduct, usernameSeller: myUsername } })
@@ -82,7 +81,7 @@ const updateProduct = async(myUsername, idProduct, request) => {
 }
 
 const deleteProduct = async(myUsername, idProduct) => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const validIdProduct = validate(productValidation.idProductValidation, idProduct)
     const searchProduct = await Product.findOne({ where: { idProduct: validIdProduct } })
     if (!searchProduct) throw new ResponseError(400, 'Product tidak ditemukan')

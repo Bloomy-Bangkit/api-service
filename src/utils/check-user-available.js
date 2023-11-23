@@ -2,11 +2,14 @@ const validate = require('../middleware/validation.js')
 const userValidation = require('../user/user-validation.js')
 const User = require('../user/user-model.js')
 
-const checkMyUserAvaiable = async(isRetrun, myUsername) => {
+const checkUserAvaiable = async(isRetrun, myUsername) => {
+    console.log({ isRetrun, myUsername })
     const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    console.log({ validMyUsername })
     const searchUser = await User.findOne({ where: { username: validMyUsername } })
+    console.log({ searchUser })
     if (!searchUser) throw new ResponseError(404, 'User anda tidak tersedia')
     if (isRetrun) return searchUser
 }
 
-module.exports = checkMyUserAvaiable
+module.exports = checkUserAvaiable

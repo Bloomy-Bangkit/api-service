@@ -3,10 +3,10 @@ const validate = require('../middleware/validation.js')
 const userValidation = require('./user-validation.js')
 const ResponseError = require('../error/response-error.js')
 const User = require('./user-model.js')
-const checkMyUserAvaiable = '../utils/checkMyUserAvailable.js'
+const checkUserAvaiable = require('../utils/check-user-available.js')
 
 const getUsers = async myUsername => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const searchAllUser = await User.findAll({
         attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'photo', 'description']
     })
@@ -15,7 +15,7 @@ const getUsers = async myUsername => {
 }
 
 const getUser = async(myUsername, username) => {
-    await checkMyUserAvaiable(false, myUsername)
+    await checkUserAvaiable(false, myUsername)
     const validUsername = validate(userValidation.usernameValidation, username)
     const searchOtherUser = await User.findOne({ where: { username: validUsername } })
     if (!searchOtherUser) throw new ResponseError(404, 'User yang dicari tidak ada')
@@ -31,7 +31,9 @@ const getUser = async(myUsername, username) => {
 }
 
 const getMyUser = async myUsername => {
-    const searchUser = await checkMyUserAvaiable(true, myUsername)
+    console.log({ myUsername })
+    const searchUser = await checkUserAvaiable(true, myUsername)
+    console.log({ searchUser })
     return {
         email: searchUser.dataValues.email,
         username: searchUser.dataValues.username,
@@ -45,7 +47,7 @@ const getMyUser = async myUsername => {
 }
 
 const updateUser = async(myUsername, request) => {
-    const searchUser = await checkMyUserAvaiable(true, myUsername)
+    const searchUser = await checkUserAvaiable(true, myUsername)
     const validRequest = validate(userValidation.updateUserValidation, request)
     searchUser.nama = validRequest.nama
     searchUser.nohp = validRequest.nohp
@@ -65,7 +67,7 @@ const updateUser = async(myUsername, request) => {
 }
 
 const updatePassword = async(myUsername, request) => {
-    const searchUser = await checkMyUserAvaiable(true, myUsername)
+    const searchUser = await checkUserAvaiable(true, myUsername)
     const validRequest = validate(userValidation.updatePasswordValidation, request)
     const matchPassword = validRequest.newPassword === validRequest.confirmNewPassword
     if (!matchPassword) throw new ResponseError(400, 'Password salah')
