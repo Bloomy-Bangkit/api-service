@@ -14,7 +14,7 @@ const getProducts = async(req, res, next) => {
 const getProduct = async(req, res, next) => {
     try {
         const myUsername = req.username
-        const { username, id } = req.query
+        const { username, id, nama, grade } = req.query
         console.log({ username, id, myUsername })
         if (username) {
             const result = await productService.getProductByUsername(myUsername, username)
@@ -22,8 +22,14 @@ const getProduct = async(req, res, next) => {
         } else if (id) {
             const result = await productService.getProductById(myUsername, id)
             res.status(200).json({ message: 'Get product by id berhasil', data: result })
+        } else if (nama) {
+            const result = await productService.getProductByName(myUsername, nama)
+            res.status(200).json({ message: 'Get product by name berhasil', data: result })
+        } else if (grade) {
+            const result = await productService.getProductByGrade(myUsername, grade)
+            res.status(200).json({ message: 'Get product by grade berhasil', data: result })
         } else {
-            throw new ResponseError(400, 'Query username atau id dibutuhkan')
+            throw new ResponseError(400, 'Query dibutuhkan')
         }
     } catch (error) {
         next(error)

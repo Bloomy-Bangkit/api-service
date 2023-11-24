@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid')
+const { Op } = require('sequelize')
 const Product = require('./product-model.js')
 const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
@@ -28,6 +29,31 @@ const getProductById = async(myUsername, idProduct) => {
     return searchProduct.dataValues
 }
 
+const getProductByName = async(myUsername, nama) => {
+    await checkUserAvaiable(false, myUsername)
+    const validNameProduct = validate(productValidation.nameValidation, nama)
+    console.log({ validNameProduct })
+    const searchProduct = await Product.findAll({
+        where: {
+            nama: {
+                [Op.like]: `%${validNameProduct}%`
+            }
+        }
+    })
+    if (searchProduct.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
+    const products = searchProduct.map(product => product.dataValues)
+    return products
+}
+
+const getProductByGrade = async(myUsername, grade) => {
+    await checkUserAvaiable(false, myUsername)
+    const validGrade = validate(productValidation.gradeValidation, grade)
+    const searchProduct = await Product.findAll({ where: { grade: validGrade } })
+    if (searchProduct.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
+    const products = searchProduct.map(product => product.dataValues)
+    return products
+}
+
 const getMyProduct = async myUsername => {
     await checkUserAvaiable(false, myUsername)
     const searchMyProducts = await Product.findAll({ where: { usernameSeller: myUsername } })
@@ -42,7 +68,7 @@ const postProduct = async(myUsername, request) => {
     const productCreated = await Product.create({
         idProduct,
         usernameSeller: validMyUsername,
-        picture: validRequest.picture || 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/a.jpg',
+        picture: validRequest.picture || 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/product/default-product.jpg',
         nama: validRequest.nama,
         description: validRequest.description,
         grade: validRequest.grade,
@@ -86,7 +112,7 @@ const deleteProduct = async(myUsername, idProduct) => {
     const searchProduct = await Product.findOne({ where: { idProduct: validIdProduct } })
     if (!searchProduct) throw new ResponseError(400, 'Product tidak ditemukan')
     const deletedProduct = await Product.destroy({ where: { idProduct: validIdProduct } })
-    if (deletedProduct === 0) throw new ResponseError(400, 'Product gagal dihapus')
+    if (deletedProduct.length === 0) throw new ResponseError(400, 'Product gagal dihapus')
     return { idProduct: validIdProduct, isDelete: deletedProduct === 1 ? true : false }
 }
 
@@ -94,6 +120,8 @@ module.exports = {
     getProducts,
     getProductByUsername,
     getProductById,
+    getProductByName,
+    getProductByGrade,
     getMyProduct,
     postProduct,
     updateProduct,

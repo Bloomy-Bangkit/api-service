@@ -2,6 +2,8 @@ const Joi = require('joi')
 
 const idProductValidation = Joi.string().max(255).required()
 const usernameValidation = Joi.string().max(255).required()
+const nameValidation = Joi.string().max(255).required()
+const gradeValidation = Joi.string().max(1).required()
 
 const postProductValidation = Joi.object({
     picture: Joi.string().max(255).optional().allow(''),
@@ -24,6 +26,8 @@ const updateProductValidation = Joi.object({
 module.exports = {
     idProductValidation,
     usernameValidation,
+    nameValidation,
+    gradeValidation,
     postProductValidation,
     updateProductValidation
 }
