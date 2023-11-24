@@ -1,3 +1,4 @@
+const path = require('path')
 const productService = require('./product-service.js')
 const ResponseError = require('../error/response-error.js')
 
@@ -49,7 +50,11 @@ const getMyProduct = async(req, res, next) => {
 const postProduct = async(req, res, next) => {
     try {
         const myUsername = req.username
-        const result = await productService.postProduct(myUsername, req.body)
+        const file = req.file
+        if (!file) throw new ResponseError(400, 'Tidak ada foto yang diunggah')
+        const filename = file.filename
+        const filePath = path.join(__dirname, '../../uploads', filename)
+        const result = await productService.postProduct(myUsername, filePath, req.body)
         res.status(200).json({ message: 'Post product berhasil', data: result })
     } catch (error) {
         next(error)

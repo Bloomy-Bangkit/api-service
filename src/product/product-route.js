@@ -1,5 +1,6 @@
 const express = require('express')
 const productController = require('./product-controller.js')
+const upload = require('../utils/multer.js')
 const authenticateToken = require('../middleware/authentication.js')
 const errorMiddleware = require('../middleware/error-middleware.js')
 
@@ -9,7 +10,7 @@ productRoute.get('/products', authenticateToken, productController.getProducts, 
 productRoute.get('/product', authenticateToken, productController.getProduct, errorMiddleware)
 productRoute.get('/product/me', authenticateToken, productController.getMyProduct, errorMiddleware)
 
-productRoute.post('/product', authenticateToken, productController.postProduct, errorMiddleware)
+productRoute.post('/product', authenticateToken, upload.single('image'), productController.postProduct, errorMiddleware)
 productRoute.put('/product/:id', authenticateToken, productController.updateProduct, errorMiddleware)
 productRoute.delete('/product/:id', authenticateToken, productController.deleteProduct, errorMiddleware)
 

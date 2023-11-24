@@ -1,38 +1,48 @@
 const { v4: uuidv4 } = require('uuid')
 const { Op } = require('sequelize')
+const fs = require('fs').promises
+const path = require('path')
+const { Storage } = require('@google-cloud/storage')
 const Product = require('./product-model.js')
 const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const productValidation = require('./product-validation.js')
 const checkUserAvaiable = require('../utils/check-user-available.js')
 
+const keyFilename = path.join(__dirname, '../../credentials/bangkitcapstone-bloomy-53eae279350a.json')
+const GCS = new Storage({ keyFilename })
+const bucketName = 'bangkitcapstone-bloomy-bucket'
+
 const getProducts = async myUsername => {
-    await checkUserAvaiable(false, myUsername)
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
+    await checkUserAvaiable(false, validMyUsername)
     const searchProducts = await Product.findAll()
     if (searchProducts.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
     return searchProducts
 }
 
-const getProductByUsername = async(myUsername, username) => {
-    await checkUserAvaiable(false, myUsername)
-    const validUsername = validate(productValidation.usernameValidation, username)
-    const searchProductsUser = await Product.findAll({ where: { usernameSeller: validUsername } })
+const getProductByUsername = async(myUsername, usernameSeller) => {
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
+    const validUsernameSeller = validate(productValidation.usernameValidation, usernameSeller)
+    await checkUserAvaiable(false, validMyUsername)
+    const searchProductsUser = await Product.findAll({ where: { usernameSeller: validUsernameSeller } })
     if (searchProductsUser.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
     return searchProductsUser
 }
 
 const getProductById = async(myUsername, idProduct) => {
-    await checkUserAvaiable(false, myUsername)
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     const validIdProduct = validate(productValidation.idProductValidation, idProduct)
+    await checkUserAvaiable(false, validMyUsername)
     const searchProduct = await Product.findOne({ where: { idProduct: validIdProduct } })
     if (!searchProduct) throw new ResponseError(404, 'Product tidak ditemukan')
     return searchProduct.dataValues
 }
 
 const getProductByName = async(myUsername, nama) => {
-    await checkUserAvaiable(false, myUsername)
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     const validNameProduct = validate(productValidation.nameValidation, nama)
-    console.log({ validNameProduct })
+    await checkUserAvaiable(false, validMyUsername)
     const searchProduct = await Product.findAll({
         where: {
             nama: {
@@ -46,8 +56,9 @@ const getProductByName = async(myUsername, nama) => {
 }
 
 const getProductByGrade = async(myUsername, grade) => {
-    await checkUserAvaiable(false, myUsername)
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     const validGrade = validate(productValidation.gradeValidation, grade)
+    await checkUserAvaiable(false, validMyUsername)
     const searchProduct = await Product.findAll({ where: { grade: validGrade } })
     if (searchProduct.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
     const products = searchProduct.map(product => product.dataValues)
@@ -55,20 +66,26 @@ const getProductByGrade = async(myUsername, grade) => {
 }
 
 const getMyProduct = async myUsername => {
-    await checkUserAvaiable(false, myUsername)
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
+    await checkUserAvaiable(false, validMyUsername)
     const searchMyProducts = await Product.findAll({ where: { usernameSeller: myUsername } })
     if (searchMyProducts.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
     return searchMyProducts
 }
 
-const postProduct = async(myUsername, request) => {
-    await checkUserAvaiable(false, myUsername)
+const postProduct = async(myUsername, filePath, request) => {
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     const validRequest = validate(productValidation.postProductValidation, request)
-    const idProduct = uuidv4()
+    await checkUserAvaiable(false, validMyUsername)
+    const fileName = path.basename(filePath)
+    const destFileName = `service/product/${fileName}`
+    await GCS.bucket(bucketName).upload(filePath, { destination: destFileName, })
+    const url = `https://storage.googleapis.com/${bucketName}/${destFileName}`
+    const defaultPicture = 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/product/default-product.jpg'
     const productCreated = await Product.create({
-        idProduct,
+        idProduct: uuidv4(),
         usernameSeller: validMyUsername,
-        picture: validRequest.picture || 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/product/default-product.jpg',
+        picture: url || defaultPicture,
         nama: validRequest.nama,
         description: validRequest.description,
         grade: validRequest.grade,
@@ -76,6 +93,7 @@ const postProduct = async(myUsername, request) => {
         weight: validRequest.weight
     })
     if (!productCreated) throw new ResponseError(400, 'Upload product gagal')
+    fs.unlink(filePath)
     return {
         idProduct: productCreated.idProduct,
         usernameSeller: productCreated.usernameSeller,
@@ -100,7 +118,6 @@ const updateProduct = async(myUsername, idProduct, request) => {
     searchProduct.grade = validRequest.grade || searchProduct.dataValues.grade
     searchProduct.price = validRequest.price || searchProduct.dataValues.price
     searchProduct.weight = validRequest.weight || searchProduct.dataValues.weight
-    searchProduct.updatedAt = new Date()
     const updatedProduct = await searchProduct.save()
     if (!updatedProduct) throw new ResponseError(400, 'Update product gagal')
     return updatedProduct

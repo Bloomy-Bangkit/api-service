@@ -6,7 +6,6 @@ const nameValidation = Joi.string().max(255).required()
 const gradeValidation = Joi.string().max(1).required()
 
 const postProductValidation = Joi.object({
-    picture: Joi.string().max(255).optional().allow(''),
     nama: Joi.string().max(255).required(),
     description: Joi.string().max(255).optional().allow(''),
     grade: Joi.string().max(1).required(),

@@ -1,9 +1,16 @@
+const fs = require('fs').promises
+const path = require('path')
 const bcrypt = require('bcrypt')
+const { Storage } = require('@google-cloud/storage')
 const validate = require('../middleware/validation.js')
 const userValidation = require('./user-validation.js')
 const ResponseError = require('../error/response-error.js')
 const User = require('./user-model.js')
 const checkUserAvaiable = require('../utils/check-user-available.js')
+
+const keyFilename = path.join(__dirname, '../../credentials/bangkitcapstone-bloomy-53eae279350a.json')
+const GCS = new Storage({ keyFilename })
+const bucketName = 'bangkitcapstone-bloomy-bucket'
 
 const getUsers = async myUsername => {
     await checkUserAvaiable(false, myUsername)
@@ -31,9 +38,7 @@ const getUser = async(myUsername, username) => {
 }
 
 const getMyUser = async myUsername => {
-    console.log({ myUsername })
     const searchUser = await checkUserAvaiable(true, myUsername)
-    console.log({ searchUser })
     return {
         email: searchUser.dataValues.email,
         username: searchUser.dataValues.username,
@@ -53,7 +58,6 @@ const updateUser = async(myUsername, request) => {
     searchUser.nohp = validRequest.nohp
     searchUser.alamat = validRequest.alamat
     searchUser.description = validRequest.description
-    searchUser.updatedAt = new Date()
     const updatedUser = await searchUser.save()
     if (!updatedUser) throw new ResponseError(400, 'Update user gagal')
     return {
@@ -74,15 +78,23 @@ const updatePassword = async(myUsername, request) => {
     const checkPasswordUser = await bcrypt.compare(validRequest.oldPassword, searchUser.dataValues.password)
     if (!checkPasswordUser) throw new ResponseError(400, 'Password salah')
     searchUser.password = await bcrypt.hash(validRequest.newPassword, 10)
-    searchUser.updatedAt = new Date()
     const updatedUser = await searchUser.save()
     if (!updatedUser) throw new ResponseError(400, 'Update password gagal')
-    return {
-        username: updatedUser.dataValues.username
-    }
+    return { username: updatedUser.dataValues.username }
 }
 
-const updatePhoto = async myUsername => {}
+const updatePhoto = async(myUsername, filePath) => {
+    const fileName = path.basename(filePath)
+    const destFileName = `service/user/${fileName}`
+    await GCS.bucket(bucketName).upload(filePath, { destination: destFileName, })
+    const url = `https://storage.googleapis.com/${bucketName}/${destFileName}`
+    const searchUser = await checkUserAvaiable(true, myUsername)
+    searchUser.photo = url
+    const updatedUser = await searchUser.save()
+    if (!updatedUser) throw new ResponseError(400, 'Update photo gagal')
+    fs.unlink(filePath)
+    return { updatedUser }
+}
 
 module.exports = {
     getUsers,

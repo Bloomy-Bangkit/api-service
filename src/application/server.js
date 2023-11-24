@@ -33,7 +33,7 @@ app.get('/', (req, res) => res.status(200).json({
         ],
         Moto: 'Cihhh! Jangan meremehkan wibuuu, dasar Ninggen tidak bergunaa! >.< iKuzooo minnaa..',
         CreatedBy: 'Hesoyamm',
-        Copyright: '©2023 All Rights Reserved.'
+        Copyright: '©2023 All Rights Reserved!'
     }
 }))
 
