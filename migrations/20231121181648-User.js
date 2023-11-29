@@ -39,6 +39,10 @@ module.exports = {
                 type: Sequelize.STRING,
                 defaultValue: '',
             },
+            kota: {
+                type: Sequelize.STRING,
+                defaultValue: '',
+            },
             photo: {
                 type: Sequelize.STRING,
                 defaultValue: '',

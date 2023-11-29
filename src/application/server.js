@@ -1,14 +1,20 @@
 const express = require('express')
 const sequelize = require('./sequelize.js')
+
+const modelSync = require('../utils/model-sync.js')
 const User = require('../user/user-model.js')
 const Product = require('../product/product-model.js')
-const modelSync = require('../utils/model-sync.js')
+const Favorite = require('../favorite/favorite-model.js')
+    // const Cart = require('../cart/cart-model.js')
+    // const Transaction = require('../transaction/transaction-model.js')
+
 const authRoute = require('../auth/auth-route.js')
 const userRoute = require('../user/user-route.js')
 const productRoute = require('../product/product-route.js')
+    // const transactionRoute = require('../transaction/tra nsaction-route.js')
 
 const app = express()
-modelSync([sequelize, User, Product], false)
+modelSync([sequelize, User, Product, Favorite], false)
 
 app.use(express.json())
 app.use('/auth', authRoute)

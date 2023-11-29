@@ -7,5 +7,6 @@ const authRoute = express.Router()
 authRoute.post('/register', authController.register, errorMiddleware)
 authRoute.post('/login', authController.login, errorMiddleware)
 authRoute.get('/verify', authController.verify, errorMiddleware)
+authRoute.get('/check', authController.check, errorMiddleware)
 
 module.exports = authRoute

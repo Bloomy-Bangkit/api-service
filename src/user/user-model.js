@@ -37,6 +37,10 @@ const User = sequelize.define('user', {
         type: DataTypes.STRING,
         defaultValue: '',
     },
+    kota: {
+        type: DataTypes.STRING,
+        defaultValue: '',
+    },
     photo: {
         type: DataTypes.STRING,
         defaultValue: '',

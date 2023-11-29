@@ -27,8 +27,18 @@ const verify = async(req, res, next) => {
     }
 }
 
+const check = async(req, res, next) => {
+    try {
+        const result = await authService.check(req.query.token)
+        res.status(200).json({ message: 'Token valid', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     register,
     login,
-    verify
+    verify,
+    check
 }

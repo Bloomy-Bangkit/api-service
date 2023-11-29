@@ -8,7 +8,7 @@ const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const productValidation = require('./product-validation.js')
 const checkUserAvaiable = require('../utils/check-user-available.js')
-
+const checkProductAvailabe = require('../utils/check-product-available.js')
 const keyFilename = path.join(__dirname, '../../credentials/bangkitcapstone-bloomy-53eae279350a.json')
 const GCS = new Storage({ keyFilename })
 const bucketName = 'bangkitcapstone-bloomy-bucket'
@@ -34,8 +34,7 @@ const getProductById = async(myUsername, idProduct) => {
     const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     const validIdProduct = validate(productValidation.idProductValidation, idProduct)
     await checkUserAvaiable(false, validMyUsername)
-    const searchProduct = await Product.findOne({ where: { idProduct: validIdProduct } })
-    if (!searchProduct) throw new ResponseError(404, 'Product tidak ditemukan')
+    const searchProduct = await checkProductAvailabe(true, validIdProduct)
     return searchProduct.dataValues
 }
 
@@ -124,11 +123,19 @@ const updateProduct = async(myUsername, idProduct, request) => {
 }
 
 const deleteProduct = async(myUsername, idProduct) => {
-    await checkUserAvaiable(false, myUsername)
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     const validIdProduct = validate(productValidation.idProductValidation, idProduct)
-    const searchProduct = await Product.findOne({ where: { idProduct: validIdProduct } })
-    if (!searchProduct) throw new ResponseError(400, 'Product tidak ditemukan')
-    const deletedProduct = await Product.destroy({ where: { idProduct: validIdProduct } })
+    const searchUser = await checkUserAvaiable(true, validMyUsername)
+    const searchProduct = await Product.findOne({
+        where: { idProduct: validIdProduct, usernameSeller: searchUser.dataValues.usernameSeller }
+    })
+    if (!searchProduct) throw new ResponseError(404, 'Product tidak tersedia')
+    const deletedProduct = await Product.destroy({
+        where: {
+            idProduct: searchProduct.dataValues.idProduct,
+            usernameSeller: searchProduct.dataValues.usernameSeller
+        }
+    })
     if (deletedProduct.length === 0) throw new ResponseError(400, 'Product gagal dihapus')
     return { idProduct: validIdProduct, isDelete: deletedProduct === 1 ? true : false }
 }
