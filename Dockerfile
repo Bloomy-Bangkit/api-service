@@ -7,6 +7,7 @@ ENV DB_HOST=35.239.213.126
 ENV DB_USER=adit
 ENV DB_PASS=AdityaBayu!
 ENV DB_NAME=bloomy-db
+ENV SECRET_PASSWORD_SUPERADMIN=Aditya-SuperAdmin@Bloomy
 ENV SECRET_KEY=12qwe8ghjasdkdUIOwqPzlEqweRTYs312dd9s3WEIQWINSAazaxcvbnm120QWasdfsadv345as67
 ENV MY_EMAIL=c313bsx3054@bangkit.academy
 ENV CLIENT_ID=506943622780-dkl3iq5t6pd0d2r4ojpjk24jmt4pha0r.apps.googleusercontent.com

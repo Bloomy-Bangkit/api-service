@@ -68,11 +68,33 @@ const updatePhoto = async(req, res, next) => {
     }
 }
 
+const deleteUsers = async(req, res, next) => {
+    try {
+        const myUsername = req.username
+        const result = await userService.deleteUsers(myUsername)
+        res.status(200).json({ message: 'Delete users berhasil', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const deleteUser = async(req, res, next) => {
+    try {
+        const myUsername = req.username
+        const result = await userService.deleteUser(myUsername)
+        res.status(200).json({ message: 'Delete user berhasil', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getUsers,
     getUser,
     getMyUser,
     updateUser,
     updatePassword,
-    updatePhoto
+    updatePhoto,
+    deleteUsers,
+    deleteUser
 }

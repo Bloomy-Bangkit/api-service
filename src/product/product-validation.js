@@ -10,7 +10,8 @@ const postProductValidation = Joi.object({
     description: Joi.string().max(255).optional().allow(''),
     grade: Joi.string().max(1).required(),
     price: Joi.number().required(),
-    weight: Joi.number().required()
+    weight: Joi.number().required(),
+    photo: Joi.string().max(255).optional().allow('')
 })
 
 const updateProductValidation = Joi.object({

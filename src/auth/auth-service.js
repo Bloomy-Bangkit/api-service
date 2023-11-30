@@ -18,6 +18,9 @@ const register = async(req, request) => {
     if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
     const checkEmail = await User.count({ where: { email: validRequest.email } })
     if (checkEmail > 0) throw new ResponseError(400, 'Email sudah digunakan')
+    const usernameCantUse = ['admin', 'Admin', 'administrator', 'Administrator', 'superadmin', 'SuperAdmin', 'superadministrator', 'SuperAdministrator']
+    const checkUsernameCantUser = usernameCantUse.filter(username => username === validUsername.username)
+    if (checkUsernameCantUser.length > 0) throw new ResponseError(404, 'Username tidak bisa digunakan')
     const checkUsername = await User.count({ where: { username: validRequest.username } })
     if (checkUsername > 0) throw new ResponseError(400, 'Username sudah digunakan')
     validRequest.password = await bcrypt.hash(validRequest.password, 10)
@@ -36,6 +39,7 @@ const register = async(req, request) => {
         nama: '',
         nohp: '',
         alamat: '',
+        kota: '',
         photo: defaultPhoto,
         description: ''
     })

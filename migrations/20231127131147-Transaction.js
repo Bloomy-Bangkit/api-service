@@ -4,7 +4,7 @@
 module.exports = {
     up: async(queryInterface, Sequelize) => {
         await queryInterface.createTable('transaction', {
-            idCart: {
+            idTransaction: {
                 type: Sequelize.STRING,
                 primaryKey: true,
                 unique: true,
@@ -16,12 +16,36 @@ module.exports = {
                     key: 'idProduct',
                 },
             },
-            usernameSeller: {
+            usernameBuyer: {
                 type: Sequelize.STRING,
                 references: {
                     model: 'users',
                     key: 'username',
                 },
+            },
+            weight: {
+                type: Sequelize.INTEGER,
+            },
+            price: {
+                type: Sequelize.INTEGER,
+            },
+            type: {
+                type: Sequelize.STRING(1),
+            },
+            status: {
+                type: Sequelize.STRING(1),
+                defaultValue: "0",
+            }
+            noResi: {
+                type: Sequelize.STRING,
+                defaultValue: "",
+            },
+            ongkir: {
+                type: Sequelize.INTEGER,
+                defaultValue: 0,
+            },
+            datePickup: {
+                type: Sequelize.DATE,
             },
             createdAt: {
                 type: Sequelize.DATE,
@@ -31,30 +55,6 @@ module.exports = {
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
             }
-        })
-
-        await queryInterface.addConstraint('products', {
-            fields: ['idProduct'],
-            type: 'foreign key',
-            name: 'fk_idProduct',
-            references: {
-                table: 'products',
-                field: 'idProduct',
-            },
-            onDelete: 'cascade',
-            onUpdate: 'cascade',
-        })
-
-        await queryInterface.addConstraint('users', {
-            fields: ['usernameSeller'],
-            type: 'foreign key',
-            name: 'fk_usernameSeller',
-            references: {
-                table: 'users',
-                field: 'username',
-            },
-            onDelete: 'cascade',
-            onUpdate: 'cascade',
         })
     },
 

@@ -12,5 +12,6 @@ userRoute.get('/user/me', authenticateToken, userController.getMyUser, errorMidd
 userRoute.put('/user', authenticateToken, userController.updateUser, errorMiddleware)
 userRoute.put('/user/password', authenticateToken, userController.updatePassword, errorMiddleware)
 userRoute.put('/user/photo', authenticateToken, upload.single('image'), userController.updatePhoto, errorMiddleware)
-
+userRoute.delete('/users', authenticateToken, userController.deleteUsers, errorMiddleware)
+userRoute.delete('/user/:id', authenticateToken, userController.deleteUser, errorMiddleware)
 module.exports = userRoute

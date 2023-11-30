@@ -15,7 +15,7 @@ const bucketName = 'bangkitcapstone-bloomy-bucket'
 const getUsers = async myUsername => {
     await checkUserAvaiable(false, myUsername)
     const searchAllUser = await User.findAll({
-        attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'photo', 'description']
+        attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'kota', 'photo', 'description']
     })
     if (searchAllUser.length === 0) throw new ResponseError(404, 'Users tidak ada')
     return searchAllUser
@@ -32,6 +32,7 @@ const getUser = async(myUsername, username) => {
         nama: searchOtherUser.dataValues.nama,
         nohp: searchOtherUser.dataValues.nohp,
         alamat: searchOtherUser.dataValues.alamat,
+        kota: searchOtherUser.dataValues.kota,
         photo: searchOtherUser.dataValues.photo,
         description: searchOtherUser.dataValues.description,
     }
@@ -46,6 +47,7 @@ const getMyUser = async myUsername => {
         nama: searchUser.dataValues.nama,
         nohp: searchUser.dataValues.nohp,
         alamat: searchUser.dataValues.alamat,
+        kota: searchUser.dataValues.kota,
         photo: searchUser.dataValues.photo,
         description: searchUser.dataValues.description,
     }
@@ -57,6 +59,7 @@ const updateUser = async(myUsername, request) => {
     searchUser.nama = validRequest.nama
     searchUser.nohp = validRequest.nohp
     searchUser.alamat = validRequest.alamat
+    searchUser.kota = validRequest.kota
     searchUser.description = validRequest.description
     const updatedUser = await searchUser.save()
     if (!updatedUser) throw new ResponseError(400, 'Update user gagal')
@@ -66,6 +69,7 @@ const updateUser = async(myUsername, request) => {
         nama: updatedUser.dataValues.nama,
         nohp: updatedUser.dataValues.nohp,
         alamat: updatedUser.dataValues.alamat,
+        kota: updatedUser.dataValues.kota,
         description: updatedUser.dataValues.description,
     }
 }
@@ -96,11 +100,17 @@ const updatePhoto = async(myUsername, filePath) => {
     return { updatedUser }
 }
 
+const deleteUsers = async myUsername => {}
+
+const deleteUser = async myUsername => {}
+
 module.exports = {
     getUsers,
     getUser,
     getMyUser,
     updateUser,
     updatePassword,
-    updatePhoto
+    updatePhoto,
+    deleteUsers,
+    deleteUser
 }

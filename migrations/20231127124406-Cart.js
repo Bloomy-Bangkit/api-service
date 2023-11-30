@@ -16,7 +16,7 @@ module.exports = {
                     key: 'idProduct',
                 },
             },
-            usernameSeller: {
+            usernameBuyer: {
                 type: Sequelize.STRING,
                 references: {
                     model: 'users',

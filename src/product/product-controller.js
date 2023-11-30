@@ -16,7 +16,6 @@ const getProduct = async(req, res, next) => {
     try {
         const myUsername = req.username
         const { username, id, nama, grade } = req.query
-        console.log({ username, id, myUsername })
         if (username) {
             const result = await productService.getProductByUsername(myUsername, username)
             res.status(200).json({ message: 'Get product by username berhasil', data: result })
@@ -64,10 +63,29 @@ const postProduct = async(req, res, next) => {
 const updateProduct = async(req, res, next) => {
     try {
         const myUsername = req.username
-        const idProduct = req.params.id
-        console.log({ myUsername, idProduct, request: req.body })
+        const idProduct = req.query.id
         const result = await productService.updateProduct(myUsername, idProduct, req.body)
         res.status(200).json({ message: 'Put product berhasil', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const updatePhotoProduct = async(req, res, next) => {
+    try {
+        const myUsername = req.username
+        const result = await productService.updatePhotoProduct(myUsername)
+        res.status(200).json({ message: 'Put product berhasil', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const deleteProducts = async(req, res, next) => {
+    try {
+        const myUsername = req.username
+        const result = await productService.deleteProducts(myUsername)
+        res.status(200).json({ message: 'Delete product berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -90,5 +108,7 @@ module.exports = {
     getMyProduct,
     postProduct,
     updateProduct,
+    updatePhotoProduct,
+    deleteProducts,
     deleteProduct
 }

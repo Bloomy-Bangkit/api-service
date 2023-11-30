@@ -14,6 +14,10 @@ const getCarts = async myUsername => {
     return searchCarts
 }
 
+const getCart = async myUsername => {}
+
+const getMyCart = async myUsername => {}
+
 const postCart = async(myUsername, idProduct) => {
     const validMyUsername = validate(cartValidation.usernameValidation, myUsername)
     const validIdProduct = validate(cartValidation.idProductValidation, idProduct)
@@ -28,6 +32,8 @@ const postCart = async(myUsername, idProduct) => {
     if (!cartCreated) throw new ResponseError(400, 'Tambah product ke cart gagal')
     return { idCart: cartCreated.idCart, idProduct: cartCreated.idProduct, usernameBuyer: cartCreated.usernameBuyer }
 }
+
+const deleteCarts = async myUsername => {}
 
 const deleteCart = async(myUsername, idCart) => {
     const validMyUsername = validate(cartValidation.usernameValidation, myUsername)
@@ -52,6 +58,9 @@ const deleteCart = async(myUsername, idCart) => {
 
 module.exports = {
     getCarts,
+    getCart,
+    getMyCart,
     postCart,
+    deleteCarts,
     deleteCart
 }

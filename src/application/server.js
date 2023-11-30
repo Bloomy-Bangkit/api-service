@@ -1,27 +1,28 @@
 const express = require('express')
-const sequelize = require('./sequelize.js')
-
 const modelSync = require('../utils/model-sync.js')
+const sequelize = require('./sequelize.js')
 const User = require('../user/user-model.js')
 const Product = require('../product/product-model.js')
 const Favorite = require('../favorite/favorite-model.js')
-    // const Cart = require('../cart/cart-model.js')
-    // const Transaction = require('../transaction/transaction-model.js')
+const Transaction = require('../transaction/transaction-model.js')
 
 const authRoute = require('../auth/auth-route.js')
 const userRoute = require('../user/user-route.js')
 const productRoute = require('../product/product-route.js')
-    // const transactionRoute = require('../transaction/tra nsaction-route.js')
+const favoriteRoute = require('../favorite/favorite-route.js')
+const transactionRoute = require('../transaction/transaction-route.js')
 
 const app = express()
-modelSync([sequelize, User, Product, Favorite], false)
+modelSync(false, [sequelize, User, Product, Favorite, Transaction])
 
 app.use(express.json())
 app.use('/auth', authRoute)
 app.use(userRoute)
 app.use(productRoute)
+app.use(favoriteRoute)
+app.use(transactionRoute)
 
-app.get('/', (req, res) => res.status(200).json({
+app.get('/', async(req, res) => res.status(200).json({
     Message: 'بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',
     Data: {
         Project: 'Capstone Bangkit 2023 Batch 2',
@@ -38,7 +39,7 @@ app.get('/', (req, res) => res.status(200).json({
             { BangkitID: 'A128BSY2319', Nama: 'Sandhi Karunia Sugihartana', Universitas: 'Politeknik Negeri Jakarta' },
         ],
         Moto: 'Cihhh! Jangan meremehkan wibuuu, dasar Ninggen tidak bergunaa! >.< iKuzooo minnaa..',
-        CreatedBy: 'Hesoyamm',
+        CreatedBy: 'Aditya Bayu',
         Copyright: '©2023 All Rights Reserved!'
     }
 }))
