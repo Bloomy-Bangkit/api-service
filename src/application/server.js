@@ -16,11 +16,11 @@ const app = express()
 modelSync(false, [sequelize, User, Product, Favorite, Transaction])
 
 app.use(express.json())
-app.use('/auth', authRoute)
-app.use(userRoute)
-app.use(productRoute)
-app.use(favoriteRoute)
-app.use(transactionRoute)
+app.use('/auth', authRoute) // 3
+app.use(userRoute) // 8
+app.use(productRoute) // 8
+app.use(favoriteRoute) // 6
+app.use(transactionRoute) // 11
 
 app.get('/', async(req, res) => res.status(200).json({
     Message: 'بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',

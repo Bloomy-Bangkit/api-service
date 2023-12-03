@@ -12,8 +12,16 @@ const getTransactions = async(req, res, next) => {
 const getTransaction = async(req, res, next) => {
     try {
         const myUsername = req.username
-        const result = await transactionService.getTransaction(myUsername)
-        res.status(200).json({ message: 'Get transaction berhasil', data: result })
+        const { username, id } = req.query
+        if (username) {
+            const result = await transactionService.getTransactionByUsername(myUsername, username)
+            res.status(200).json({ message: 'Get transaction by username berhasil', data: result })
+        } else if (id) {
+            const result = await transactionService.getTransactionById(myUsername, id)
+            res.status(200).json({ message: 'Get transaction by id berhasil', data: result })
+        } else {
+            throw new ResponseError(400, 'Query dibutuhkan')
+        }
     } catch (error) {
         next(error)
     }
