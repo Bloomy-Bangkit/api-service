@@ -1,3 +1,4 @@
+const path = require('path')
 const userService = require('./user-service.js')
 const ResponseError = require('../error/response-error.js')
 
@@ -56,7 +57,32 @@ const updatePassword = async(req, res, next) => {
 const updatePhoto = async(req, res, next) => {
     try {
         const myUsername = req.username
-        res.status(200).json({ message: 'Change password berhasil', data: myUsername })
+        const file = req.file
+        if (!file) throw new ResponseError(400, 'Tidak ada foto yang diunggah')
+        const filename = file.filename
+        const filePath = path.join(__dirname, '../../uploads', filename)
+        const result = await userService.updatePhoto(myUsername, filePath)
+        res.status(200).json({ message: 'Change password berhasil', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const deleteUsers = async(req, res, next) => {
+    try {
+        const myUsername = req.username
+        const result = await userService.deleteUsers(myUsername)
+        res.status(200).json({ message: 'Delete users berhasil', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const deleteUser = async(req, res, next) => {
+    try {
+        const myUsername = req.username
+        const result = await userService.deleteUser(myUsername)
+        res.status(200).json({ message: 'Delete user berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -68,5 +94,7 @@ module.exports = {
     getMyUser,
     updateUser,
     updatePassword,
-    updatePhoto
+    updatePhoto,
+    deleteUsers,
+    deleteUser
 }

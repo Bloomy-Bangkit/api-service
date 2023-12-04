@@ -6,6 +6,7 @@ const updateUserValidation = Joi.object({
     nama: Joi.string().max(255).optional().allow(''),
     nohp: Joi.string().max(16).optional().allow(''),
     alamat: Joi.string().max(255).optional().allow(''),
+    kota: Joi.string().max(255).optional().allow(''),
     description: Joi.string().max(255).optional().allow('')
 })
 

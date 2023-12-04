@@ -1,4 +1,4 @@
-const modelSync = async(model, force) => {
+const modelSync = async(force, model) => {
     for (let i = 0; i < model.length; i++) {
         await model[i]
             .sync({ force })
