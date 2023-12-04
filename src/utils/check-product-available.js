@@ -7,7 +7,7 @@ const checkProductAvailabe = async(isRetrun, idProduct) => {
     const validIdProduct = validate(productValidation.idProductValidation, idProduct)
     const searchProduct = await Product.findOne({ where: { idProduct: validIdProduct } })
     if (!searchProduct) throw new ResponseError(404, 'Product tidak tersedia')
-    if (isRetrun) return searchUser
+    if (isRetrun) return searchProduct
 }
 
 module.exports = checkProductAvailabe

@@ -7,13 +7,14 @@ const transactionRoute = express.Router()
 
 transactionRoute.get('/transactions', authenticateToken, transactionController.getTransactions, errorMiddleware)
 transactionRoute.get('/transaction', authenticateToken, transactionController.getTransaction, errorMiddleware)
-transactionRoute.get('/transaction/me', authenticateToken, transactionController.getMyTransaction, errorMiddleware)
+transactionRoute.get('/transactions/me', authenticateToken, transactionController.getMyTransactions, errorMiddleware)
 transactionRoute.get('/transaction/buyer', authenticateToken, transactionController.getTransactionAsBuyer, errorMiddleware)
 transactionRoute.get('/transaction/seller', authenticateToken, transactionController.getTransactionAsSeller, errorMiddleware)
 transactionRoute.post('/transaction', authenticateToken, transactionController.postTransaction, errorMiddleware)
 transactionRoute.put('/transaction/buyer/:id', authenticateToken, transactionController.putTransactionAsBuyer, errorMiddleware)
 transactionRoute.put('/transaction/seller/:id', authenticateToken, transactionController.putTransactionAsSeller, errorMiddleware)
+transactionRoute.put('/transaction/reject/:id', authenticateToken, transactionController.rejectTransaction, errorMiddleware)
 transactionRoute.delete('/transactions', authenticateToken, transactionController.deleteTransactions, errorMiddleware)
-transactionRoute.delete('/transaction', authenticateToken, transactionController.deleteTransaction, errorMiddleware)
+transactionRoute.delete('/transaction/:id', authenticateToken, transactionController.deleteTransaction, errorMiddleware)
 
 module.exports = transactionRoute

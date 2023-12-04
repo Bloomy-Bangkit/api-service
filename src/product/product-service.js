@@ -65,7 +65,7 @@ const getProductByGrade = async(myUsername, grade) => {
     return products
 }
 
-const getMyProduct = async myUsername => {
+const getMyProducts = async myUsername => {
     const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     await checkUserAvaiable(false, validMyUsername)
     const searchMyProducts = await Product.findAll({ where: { usernameSeller: myUsername } })
@@ -149,7 +149,7 @@ module.exports = {
     getProductById,
     getProductByName,
     getProductByGrade,
-    getMyProduct,
+    getMyProducts,
     postProduct,
     updateProduct,
     deleteProducts,

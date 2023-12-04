@@ -5,7 +5,6 @@ const User = require('../user/user-model.js')
 const Product = require('../product/product-model.js')
 const Favorite = require('../favorite/favorite-model.js')
 const Transaction = require('../transaction/transaction-model.js')
-
 const authRoute = require('../auth/auth-route.js')
 const userRoute = require('../user/user-route.js')
 const productRoute = require('../product/product-route.js')
@@ -14,7 +13,6 @@ const transactionRoute = require('../transaction/transaction-route.js')
 
 const app = express()
 modelSync(false, [sequelize, User, Product, Favorite, Transaction])
-
 app.use(express.json())
 app.use('/auth', authRoute) // 3
 app.use(userRoute) // 8

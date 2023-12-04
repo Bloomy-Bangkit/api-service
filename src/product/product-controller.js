@@ -36,10 +36,10 @@ const getProduct = async(req, res, next) => {
     }
 }
 
-const getMyProduct = async(req, res, next) => {
+const getMyProducts = async(req, res, next) => {
     try {
         const myUsername = req.username
-        const result = await productService.getMyProduct(myUsername)
+        const result = await productService.getMyProducts(myUsername)
         res.status(200).json({ message: 'Get my product berhasil', data: result })
     } catch (error) {
         next(error)
@@ -105,7 +105,7 @@ const deleteProduct = async(req, res, next) => {
 module.exports = {
     getProducts,
     getProduct,
-    getMyProduct,
+    getMyProducts,
     postProduct,
     updateProduct,
     updatePhotoProduct,
