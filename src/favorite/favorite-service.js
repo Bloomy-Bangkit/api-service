@@ -48,7 +48,6 @@ const postFavorite = async(myUsername, idProduct) => {
     const validIdProduct = await validate(favoriteValidation.idProductValidation, idProduct)
     const searchUser = await checkUserAvaiable(true, validUsername)
     const searchProduct = await checkProductAvaiable(true, validIdProduct)
-
     const searchFavoriteIsAvailable = await Favorite.findOne({ where: { idProduct, usernameBuyer: validUsername } })
     if (searchFavoriteIsAvailable) throw new ResponseError(400, 'Product sudah dalam favorite')
     const favoriteCreated = await Favorite.create({
