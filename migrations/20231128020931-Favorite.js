@@ -1,9 +1,8 @@
-'use strict';
+'use strict'
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
     up: async(queryInterface, Sequelize) => {
-        await queryInterface.createTable('favorite', {
+        await queryInterface.createTable('favorites', {
             idFavorite: {
                 type: Sequelize.STRING,
                 primaryKey: true,
@@ -25,40 +24,16 @@ module.exports = {
             },
             createdAt: {
                 type: Sequelize.DATE,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                defaultValue: Sequelize.NOW,
             },
             updatedAt: {
                 type: Sequelize.DATE,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-            }
-        })
-
-        await queryInterface.addConstraint('products', {
-            fields: ['usernameBuyer'],
-            type: 'foreign key',
-            name: 'fk_idProduct',
-            references: {
-                table: 'products',
-                field: 'idProduct',
+                defaultValue: Sequelize.NOW,
             },
-            onDelete: 'cascade',
-            onUpdate: 'cascade',
-        })
-
-        await queryInterface.addConstraint('users', {
-            fields: ['usernameSeller'],
-            type: 'foreign key',
-            name: 'fk_usernameSeller',
-            references: {
-                table: 'users',
-                field: 'username',
-            },
-            onDelete: 'cascade',
-            onUpdate: 'cascade',
         })
     },
 
     down: async(queryInterface, Sequelize) => {
-        await queryInterface.dropTable('favorite')
+        await queryInterface.dropTable('favorites')
     }
-};
+}

@@ -1,9 +1,8 @@
-'use strict';
+'use strict'
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
     up: async(queryInterface, Sequelize) => {
-        await queryInterface.createTable('transaction', {
+        await queryInterface.createTable('transactions', {
             idTransaction: {
                 type: Sequelize.STRING,
                 primaryKey: true,
@@ -15,6 +14,8 @@ module.exports = {
                     model: 'products',
                     key: 'idProduct',
                 },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE',
             },
             usernameBuyer: {
                 type: Sequelize.STRING,
@@ -22,6 +23,8 @@ module.exports = {
                     model: 'users',
                     key: 'username',
                 },
+                onUpdate: 'CASCADE',
+                onDelete: 'SET NULL', // or 'CASCADE' or 'SET NULL' depending on your requirements
             },
             weight: {
                 type: Sequelize.INTEGER,
@@ -35,7 +38,7 @@ module.exports = {
             status: {
                 type: Sequelize.STRING(1),
                 defaultValue: "0",
-            }
+            },
             noResi: {
                 type: Sequelize.STRING,
                 defaultValue: "",
@@ -49,16 +52,16 @@ module.exports = {
             },
             createdAt: {
                 type: Sequelize.DATE,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                defaultValue: Sequelize.NOW,
             },
             updatedAt: {
                 type: Sequelize.DATE,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-            }
+                defaultValue: Sequelize.NOW,
+            },
         })
     },
 
     down: async(queryInterface, Sequelize) => {
-        await queryInterface.dropTable('transaction')
+        await queryInterface.dropTable('transactions')
     }
-};
+}

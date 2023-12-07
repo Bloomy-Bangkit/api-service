@@ -1,6 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize')
 const sequelize = require('../application/sequelize.js')
 const User = require('../user/user-model.js')
+const Favorite = require('../favorite/favorite-model.js')
+const Transaction = require('../transaction/transaction-model.js')
 
 const Product = sequelize.define('product', {
     idProduct: {
@@ -44,10 +46,19 @@ const Product = sequelize.define('product', {
     }
 }, { sequelize, modelName: 'product' })
 
-Product.belongsTo(User, {
-    foreignKey: 'usernameSeller',
+Transaction.belongsTo(Product, {
+    foreignKey: 'idProduct',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
 })
+
+Favorite.belongsTo(Product, {
+    foreignKey: 'idProduct',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+})
+
+Product.hasMany(Favorite, { foreignKey: 'idProduct' })
+Product.hasMany(Transaction, { foreignKey: 'idProduct' })
 
 module.exports = Product
