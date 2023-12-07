@@ -57,16 +57,4 @@ const Transaction = sequelize.define('transaction', {
     }
 }, { sequelize, modelName: 'transaction' })
 
-Transaction.belongsTo(Product, {
-    foreignKey: 'idProduct',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-})
-
-Transaction.belongsTo(User, {
-    foreignKey: 'usernameBuyer',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-})
-
 module.exports = Transaction

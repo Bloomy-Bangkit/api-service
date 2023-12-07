@@ -4,6 +4,7 @@ const fs = require('fs').promises
 const path = require('path')
 const { Storage } = require('@google-cloud/storage')
 const Product = require('./product-model.js')
+const Favorite = require('../favorite/favorite-model.js')
 const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const productValidation = require('./product-validation.js')
@@ -17,9 +18,13 @@ const bucketName = 'bangkitcapstone-bloomy-bucket'
 const getProducts = async myUsername => {
     const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     await checkUserAvaiable(false, validMyUsername)
-    const searchProducts = await Product.findAll()
-    if (searchProducts.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
-    return searchProducts
+    const searchProducts = await Product.findAll({ include: [{ model: Favorite, required: false, }] })
+    const products = searchProducts.map(product => ({
+        ...product.toJSON(),
+        isFavorite: product.favorites.some(fav => fav.idProduct === product.idProduct && fav.usernameBuyer === validMyUsername),
+    }))
+    if (products.length === 0) throw new ResponseError(404, 'Product tidak ditemukan')
+    return products
 }
 
 const getProductByUsername = async(myUsername, usernameSeller) => {

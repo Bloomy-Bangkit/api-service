@@ -8,7 +8,6 @@ const gradeValidation = Joi.string().max(1).required()
 const postProductValidation = Joi.object({
     nama: Joi.string().max(255).required(),
     grade: Joi.string().max(1).required(),
-    photo: Joi.string().max(255).optional().allow(''),
     description: Joi.string().max(255).optional().allow(''),
     price: Joi.number().positive().required(),
     weight: Joi.number().positive().required(),

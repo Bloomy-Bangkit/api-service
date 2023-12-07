@@ -33,16 +33,4 @@ const Favorite = sequelize.define('favorite', {
     }
 }, { sequelize, modelName: 'favorite' })
 
-Favorite.belongsTo(User, {
-    foreignKey: 'usernameBuyer',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-})
-
-Favorite.belongsTo(Product, {
-    foreignKey: 'idProduct',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-})
-
 module.exports = Favorite

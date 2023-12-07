@@ -8,8 +8,6 @@ const sendEmailVerify = require('../utils/nodemailer.js')
 const verifyToken = require('../utils/verify-token.js')
 const User = require('../user/user-model.js')
 
-// =================== SERVICES ===================
-
 const register = async(req, request) => {
     const validRequest = validate(authValidation.registerValidation, request)
     const matchPassword = validRequest.password === validRequest.confirmPassword ? true : false

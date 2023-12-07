@@ -1,14 +1,13 @@
 'use strict'
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
     up: async(queryInterface, Sequelize) => {
-        await queryInterface.createTable('user', {
+        await queryInterface.createTable('users', {
             email: {
                 type: Sequelize.STRING,
                 allowNull: false,
                 unique: true,
-                primaryKey: true
+                primaryKey: true,
             },
             username: {
                 type: Sequelize.STRING(100),
@@ -53,16 +52,59 @@ module.exports = {
             },
             createdAt: {
                 type: Sequelize.DATE,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                defaultValue: Sequelize.NOW,
             },
             updatedAt: {
                 type: Sequelize.DATE,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-            }
+                defaultValue: Sequelize.NOW,
+            },
+        })
+
+        // Add foreign key for Product
+        await queryInterface.addColumn('products', 'usernameSeller', {
+            type: Sequelize.STRING,
+            references: {
+                model: 'users',
+                key: 'username',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+        })
+
+        // Add foreign key for Transaction
+        await queryInterface.addColumn('transactions', 'usernameBuyer', {
+            type: Sequelize.STRING,
+            references: {
+                model: 'users',
+                key: 'username',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+        })
+
+        // Add foreign key for Favorite
+        await queryInterface.addColumn('favorites', 'usernameBuyer', {
+            type: Sequelize.STRING,
+            references: {
+                model: 'users',
+                key: 'username',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
         })
     },
 
     down: async(queryInterface, Sequelize) => {
-        await queryInterface.dropTable('user')
+        // Remove foreign key from Product
+        await queryInterface.removeColumn('products', 'usernameSeller')
+
+        // Remove foreign key from Transaction
+        await queryInterface.removeColumn('transactions', 'usernameBuyer')
+
+        // Remove foreign key from Favorite
+        await queryInterface.removeColumn('favorites', 'usernameBuyer')
+
+        // Drop the users table
+        await queryInterface.dropTable('users')
     }
 }
