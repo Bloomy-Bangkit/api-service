@@ -16,6 +16,7 @@ steps:
       - 'api-service'
       - '--image=gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA'
       - '--region=us-central1'
+      - '--cpu=1'
       - '--memory=1024Mi'
       - '--allow-unauthenticated'
 images:
