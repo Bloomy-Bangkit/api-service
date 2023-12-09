@@ -62,11 +62,11 @@ steps:
       - '--allow-unauthenticated'
       - '--set-env-vars=DB_NAME=${_DB_NAME},DB_USER=${_DB_USER},DB_HOST=${_DB_HOST},DB_PASS=${_DB_PASS},DB_PORT=${_DB_PORT}'
 substitutions:
-  _DB_NAME: /workspace/secrets/DB_NAME
-  _DB_USER: /workspace/secrets/DB_USER
-  _DB_HOST: /workspace/secrets/DB_HOST
-  _DB_PASS: /workspace/secrets/DB_PASS
-  _DB_PORT: /workspace/secrets/DB_PORT
+  _DB_NAME: "$(cat /workspace/secrets/DB_NAME)"
+  _DB_USER: "$(cat /workspace/secrets/DB_USER)"
+  _DB_HOST: "$(cat /workspace/secrets/DB_HOST)"
+  _DB_PASS: "$(cat /workspace/secrets/DB_PASS)"
+  _DB_PORT: "$(cat /workspace/secrets/DB_PORT)"
 images:
   - 'gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA'
 logsBucket: 'gs://bangkitcapstone-bloomy-bucket/logs'
