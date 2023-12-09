@@ -6,13 +6,39 @@ steps:
       - 'access'
       - 'latest'
       - '--secret=DB_NAME'
+    id: 'get-db-name'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
       - '--secret=DB_USER'
+    id: 'get-db-user'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
       - '--secret=DB_HOST'
+    id: 'get-db-host'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
       - '--secret=DB_PASS'
+    id: 'get-db-pass'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
       - '--secret=DB_PORT'
-    id: 'get-secrets'
-
-
+    id: 'get-db-port'
   - name: gcr.io/cloud-builders/docker
     args: 
       - 'build'
