@@ -60,13 +60,9 @@ steps:
       - '--region=us-central1'
       - '--memory=1024Mi'
       - '--allow-unauthenticated'
-      - '--set-env-vars=DB_NAME=${_DB_NAME},DB_USER=${_DB_USER},DB_HOST=${_DB_HOST},DB_PASS=${_DB_PASS},DB_PORT=${_DB_PORT}'
-substitutions:
-  _DB_NAME: "$$(cat /workspace/secrets/DB_NAME)"
-  _DB_USER: "$$(cat /workspace/secrets/DB_USER)"
-  _DB_HOST: "$$(cat /workspace/secrets/DB_HOST)"
-  _DB_PASS: "$$(cat /workspace/secrets/DB_PASS)"
-  _DB_PORT: "$$(cat /workspace/secrets/DB_PORT)"
+      - '--set-env-vars=DB_NAME=$(cat /secret/DB_NAME),DB_USER=$(cat /secret/DB_USER),DB_HOST=$(cat /secret/DB_HOST),DB_PASS=$(cat /secret/DB_PASS),DB_PORT=$(cat /secret/DB_PORT)'
+      - '--secrets=DB_NAME=/secret/DB_NAME,DB_USER=/secret/DB_USER,DB_HOST=/secret/DB_HOST,DB_PASS=/secret/DB_PASS,DB_PORT=/secret/DB_PORT'
+      - '--volume=secrets:/secret'
 images:
   - 'gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA'
 logsBucket: 'gs://bangkitcapstone-bloomy-bucket/logs'
