@@ -72,7 +72,7 @@ const login = async request => {
 const verify = async request => {
     const validToken = validate(authValidation.tokenValidation, request)
     const userEmail = await verifyToken(validToken)
-    let searchUser = await User.findOne({ where: { email: userEmail } })
+    const searchUser = await User.findOne({ where: { email: userEmail } })
     if (!searchUser) throw new ResponseError(400, 'User tidak ada')
     searchUser.actived = true
     searchUser.updatedAt = new Date()
