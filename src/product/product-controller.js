@@ -40,7 +40,17 @@ const getMyProducts = async(req, res, next) => {
     try {
         const myUsername = req.username
         const result = await productService.getMyProducts(myUsername)
-        res.status(200).json({ error: false, message: 'Get my product berhasil', data: result })
+        res.status(200).json({ error: false, message: 'Berhasil GET My products', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getTotalMyProducts = async(req, res, next) => {
+    try {
+        const myUsername = req.username
+        const result = await productService.getTotalMyProducts(myUsername)
+        res.status(200).json({ error: false, message: 'Berhasil GET Total my products', data: result })
     } catch (error) {
         next(error)
     }
@@ -111,6 +121,7 @@ module.exports = {
     getProducts,
     getProduct,
     getMyProducts,
+    getTotalMyProducts,
     postProduct,
     updateProduct,
     updatePhotoProduct,
