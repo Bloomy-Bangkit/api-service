@@ -47,6 +47,7 @@ app.get('/', (req, res) => {
             Copyright: '©2023 All Rights Reserved!'
         },
         env: {
+            message: 'Hello from cloud sql',
             DB_NAME: process.env.DB_NAME,
             DB_PORT: process.env.DB_PORT,
             DB_USER: process.env.DB_USER,
