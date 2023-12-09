@@ -192,7 +192,7 @@ const postProduct = async(myUsername, filePath, request) => {
         price: validRequest.price,
         weight: validRequest.weight
     })
-    if (!productCreated) throw new ResponseError(400, 'Tambah product gagal')
+    if (!productCreated) throw new ResponseError(400, 'Gagal tambah product')
     fs.unlink(filePath)
     return {
         idProduct: productCreated.idProduct,

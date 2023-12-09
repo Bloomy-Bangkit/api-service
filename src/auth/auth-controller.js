@@ -1,3 +1,4 @@
+const path = require('path')
 const authService = require('./auth-service.js')
 
 const register = async(req, res, next) => {
@@ -20,8 +21,9 @@ const login = async(req, res, next) => {
 
 const verify = async(req, res, next) => {
     try {
-        const result = await authService.verify(req.query.token)
-        res.status(200).json({ error: false, message: 'Verifikasi akun berhasil', data: result })
+        const token = req.query.token
+        await authService.verify(token)
+        res.redirect('/auth/user')
     } catch (error) {
         next(error)
     }
@@ -29,9 +31,18 @@ const verify = async(req, res, next) => {
 
 const check = async(req, res, next) => {
     try {
-        console.log(req.query.token)
         const result = await authService.check(req.query.token)
         res.status(200).json({ error: false, message: 'Token valid', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const user = async(req, res, next) => {
+    try {
+        const filePath = '../views/index.html'
+        const absolutePath = path.resolve(__dirname, filePath)
+        res.sendFile(absolutePath)
     } catch (error) {
         next(error)
     }
@@ -41,5 +52,6 @@ module.exports = {
     register,
     login,
     verify,
-    check
+    check,
+    user
 }

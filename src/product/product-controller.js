@@ -6,7 +6,7 @@ const getProducts = async(req, res, next) => {
     try {
         const myUsername = req.username
         const result = await productService.getProducts(myUsername)
-        res.status(200).json({ error: false, message: 'Berhasil GET Data products', data: result })
+        res.status(200).json({ error: false, message: 'Berhasil get data products', data: result })
     } catch (error) {
         next(error)
     }
@@ -18,16 +18,16 @@ const getProduct = async(req, res, next) => {
         const { username, id, nama, grade } = req.query
         if (username) {
             const result = await productService.getProductByUsername(myUsername, username)
-            res.status(200).json({ error: false, message: 'Berhasil GET data product by username seller', data: result })
+            res.status(200).json({ error: false, message: 'Berhasil get data product by username seller', data: result })
         } else if (id) {
             const result = await productService.getProductById(myUsername, id)
-            res.status(200).json({ error: false, message: 'Berhasil GET data product by id product', data: result })
+            res.status(200).json({ error: false, message: 'Berhasil get data product by id product', data: result })
         } else if (nama) {
             const result = await productService.getProductByName(myUsername, nama)
-            res.status(200).json({ error: false, message: 'Berhasil GET data product by nama product', data: result })
+            res.status(200).json({ error: false, message: 'Berhasil get data product by nama product', data: result })
         } else if (grade) {
             const result = await productService.getProductByGrade(myUsername, grade)
-            res.status(200).json({ error: false, message: 'Berhasil GET data product by grade', data: result })
+            res.status(200).json({ error: false, message: 'Berhasil get data product by grade', data: result })
         } else {
             throw new ResponseError(400, 'Query dibutuhkan')
         }
@@ -40,7 +40,7 @@ const getMyProducts = async(req, res, next) => {
     try {
         const myUsername = req.username
         const result = await productService.getMyProducts(myUsername)
-        res.status(200).json({ error: false, message: 'Berhasil GET My products', data: result })
+        res.status(200).json({ error: false, message: 'Berhasil get my products', data: result })
     } catch (error) {
         next(error)
     }
@@ -50,7 +50,7 @@ const getTotalMyProducts = async(req, res, next) => {
     try {
         const myUsername = req.username
         const result = await productService.getTotalMyProducts(myUsername)
-        res.status(200).json({ error: false, message: 'Berhasil GET Total my products', data: result })
+        res.status(200).json({ error: false, message: 'Berhasil get total my products', data: result })
     } catch (error) {
         next(error)
     }
