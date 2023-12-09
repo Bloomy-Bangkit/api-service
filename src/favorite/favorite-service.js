@@ -26,7 +26,7 @@ const getFavoriteByUsername = async(myUsername, usernameBuyer) => {
     return searchFavorite
 }
 
-const getFavoriteById = async(myUsername, idFavorite) => {
+const getFavoriteByIdFavorite = async(myUsername, idFavorite) => {
     const validUsername = await validate(favoriteValidation.usernameValidation, myUsername)
     const validIdFavorite = await validate(favoriteValidation.idFavoriteValidation, idFavorite)
     await checkUserAvaiable(false, validUsername)
@@ -37,7 +37,7 @@ const getFavoriteById = async(myUsername, idFavorite) => {
 
 const getMyFavorite = async myUsername => {
     const validUsername = await validate(favoriteValidation.usernameValidation, myUsername)
-    const searchUser = await checkUserAvaiable(false, validUsername)
+    const searchUser = await checkUserAvaiable(true, validUsername)
     const searchMyFavorite = await Favorite.findAll({ where: { usernameBuyer: searchUser.dataValues.username } })
     if (searchMyFavorite.length === 0) throw new ResponseError(404, 'Favorite tidak tersedia')
     return searchMyFavorite
@@ -55,7 +55,7 @@ const postFavorite = async(myUsername, idProduct) => {
         idProduct: searchProduct.dataValues.idProduct,
         usernameBuyer: searchUser.dataValues.username
     })
-    if (!favoriteCreated) throw new ResponseError(400, 'Tambah favorite gagal')
+    if (!favoriteCreated) throw new ResponseError(400, 'Gagal tambah favorite')
     return {
         idFavorite: favoriteCreated.idFavorite,
         idProduct: favoriteCreated.idProduct,
@@ -79,14 +79,14 @@ const deleteFavorite = async(myUsername, idFavorite) => {
             usernameSeller: searchUser.dataValues.usernameSeller
         }
     })
-    if (deleteFavorite.length === 0) throw new ResponseError(400, 'Favorite gagal dihapus')
+    if (deleteFavorite.length === 0) throw new ResponseError(400, 'Gagal delete favorite')
     return { idFavorite: validIdFavorite, isDelete: deleteFavorite === 1 ? true : false }
 }
 
 module.exports = {
     getFavorites,
     getFavoriteByUsername,
-    getFavoriteById,
+    getFavoriteByIdFavorite,
     getMyFavorite,
     postFavorite,
     deleteFavorites,

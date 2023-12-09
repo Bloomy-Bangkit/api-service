@@ -11,7 +11,7 @@ productRoute.get('/product', authenticateToken, productController.getProduct, er
 productRoute.get('/products/me', authenticateToken, productController.getMyProducts, errorMiddleware)
 productRoute.post('/product', authenticateToken, upload.single('image'), productController.postProduct, errorMiddleware)
 productRoute.put('/product', authenticateToken, productController.updateProduct, errorMiddleware) // EDIT
-productRoute.put('/product/photo', authenticateToken, productController.updatePhotoProduct, errorMiddleware) // EDIT
+productRoute.put('/product/photo', authenticateToken, upload.single('image'), productController.updatePhotoProduct, errorMiddleware) // EDIT
 productRoute.delete('/products', authenticateToken, productController.deleteProducts, errorMiddleware)
 productRoute.delete('/product/:id', authenticateToken, productController.deleteProduct, errorMiddleware)
 

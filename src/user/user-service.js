@@ -14,18 +14,18 @@ const bucketName = 'bangkitcapstone-bloomy-bucket'
 
 const getUsers = async myUsername => {
     await checkUserAvaiable(false, myUsername)
-    const searchAllUser = await User.findAll({
+    const searchAllUsers = await User.findAll({
         attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'kota', 'photo', 'description']
     })
-    if (searchAllUser.length === 0) throw new ResponseError(404, 'Users tidak ada')
-    return searchAllUser
+    if (searchAllUsers.length === 0) throw new ResponseError(404, 'Data users tidak tersedia')
+    return searchAllUsers
 }
 
 const getUser = async(myUsername, username) => {
     await checkUserAvaiable(false, myUsername)
     const validUsername = validate(userValidation.usernameValidation, username)
     const searchOtherUser = await User.findOne({ where: { username: validUsername } })
-    if (!searchOtherUser) throw new ResponseError(404, 'User yang dicari tidak ada')
+    if (!searchOtherUser) throw new ResponseError(404, 'User tidak ditemukan')
     return {
         username: searchOtherUser.dataValues.username,
         actived: searchOtherUser.dataValues.actived,
@@ -97,7 +97,10 @@ const updatePhoto = async(myUsername, filePath) => {
     const updatedUser = await searchUser.save()
     if (!updatedUser) throw new ResponseError(400, 'Update photo gagal')
     fs.unlink(filePath)
-    return { updatedUser }
+    return {
+        username: updatedUser.dataValues.username,
+        photo: updatedUser.dataValues.photo
+    }
 }
 
 const deleteUsers = async myUsername => {}
