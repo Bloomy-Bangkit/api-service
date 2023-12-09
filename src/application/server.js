@@ -33,14 +33,63 @@ app.get('/', (req, res) => {
             Tema: 'Ocean and Maritime Economy',
             Judul: 'Bloomy',
             Team: 'CH2-PS086',
-            Anggota: [
-                { BangkitID: 'M128BSY0948', Nama: 'Heical Chandra Syahputra', Universitas: 'Politeknik Negeri Jakarta' },
-                { BangkitID: 'M128BSY1852', Nama: 'Andra Rizki Pratama', Universitas: 'Politeknik Negeri Jakarta' },
-                { BangkitID: 'M015BSY0866', Nama: 'Novebri Tito Ramadhani', Universitas: 'Universitas Negeri Yogyakarta' },
-                { BangkitID: 'C256BSY3481', Nama: 'Aditya Bayu Aji', Universitas: 'Universitas Muhammadiyah Cirebon' },
-                { BangkitID: 'C313BSX3054', Nama: 'Asrini Salsabila Putri', Universitas: 'Universitas Siliwangi' },
-                { BangkitID: 'A258BSY2276', Nama: 'Ahmad Tiova Ian Avola', Universitas: 'Universitas Muhammadiyah Malang' },
-                { BangkitID: 'A128BSY2319', Nama: 'Sandhi Karunia Sugihartana', Universitas: 'Politeknik Negeri Jakarta' },
+            Website: 'https://website-bloomy.vercel.app/',
+            Anggota: [{
+                    BangkitID: 'M128BSY0948',
+                    Nama: 'Heical Chandra Syahputra',
+                    LearningPath: 'Machine Learning',
+                    Universitas: 'Politeknik Negeri Jakarta',
+                    Github: 'https://github.com/Dynavx',
+                    Linkedin: 'https://www.linkedin.com/in/heical-chandra/'
+                },
+                {
+                    BangkitID: 'M128BSY1852',
+                    Nama: 'Andra Rizki Pratama',
+                    LearningPath: 'Machine Learning',
+                    Universitas: 'Politeknik Negeri Jakarta',
+                    Github: 'https://github.com/nulitas',
+                    Linkedin: 'https://www.linkedin.com/in/andra-rizki-pratama/'
+                },
+                {
+                    BangkitID: 'M015BSY0866',
+                    Nama: 'Novebri Tito Ramadhani',
+                    LearningPath: 'Machine Learning',
+                    Universitas: 'Universitas Negeri Yogyakarta',
+                    Github: 'https://github.com/Benedixx',
+                    Linkedin: 'https://www.linkedin.com/in/novebri-tito-ramadhani/'
+                },
+                {
+                    BangkitID: 'C256BSY3481',
+                    Nama: 'Aditya Bayu Aji',
+                    LearningPath: 'Cloud Computing',
+                    Universitas: 'Universitas Muhammadiyah Cirebon',
+                    Github: 'https://github.com/iniadittt',
+                    Linkedin: 'https://www.linkedin.com/in/iniadittt/'
+                },
+                {
+                    BangkitID: 'C313BSX3054',
+                    Nama: 'Asrini Salsabila Putri',
+                    LearningPath: 'Cloud Computing',
+                    Universitas: 'Universitas Siliwangi',
+                    Github: 'https://github.com/asrinisp',
+                    Linkedin: 'https://www.linkedin.com/in/asrinisalsabilaputri/'
+                },
+                {
+                    BangkitID: 'A258BSY2276',
+                    Nama: 'Ahmad Tiova Ian Avola',
+                    LearningPath: 'Mobile Development',
+                    Universitas: 'Universitas Muhammadiyah Malang',
+                    Github: 'https://github.com/VBeatDead',
+                    Linkedin: 'https://www.linkedin.com/in/tiova/'
+                },
+                {
+                    BangkitID: 'A128BSY2319',
+                    Nama: 'Sandhi Karunia Sugihartana',
+                    LearningPath: 'Mobile Development',
+                    Universitas: 'Politeknik Negeri Jakarta',
+                    Github: 'https://github.com/Lowl16',
+                    Linkedin: 'https://www.linkedin.com/in/sandhi-karunia-sugihartana/'
+                },
             ],
             Moto: 'Cihhh! Jangan meremehkan wibuuu, dasar Ninggen tidak bergunaa! >.< iKuzooo minnaa..',
             CreatedBy: 'Aditya Bayu',

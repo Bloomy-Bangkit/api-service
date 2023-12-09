@@ -22,8 +22,11 @@ const login = async(req, res, next) => {
 const verify = async(req, res, next) => {
     try {
         const token = req.query.token
-        await authService.verify(token)
-        res.redirect(`/auth/user?token=${token}`)
+        const isVerify = await authService.verify(token)
+        if (!isVerify) throw new ResponseError(400, 'Akun belum diverifikasi')
+        const filePath = '../views/index.html'
+        const absolutePath = path.resolve(__dirname, filePath)
+        res.sendFile(absolutePath)
     } catch (error) {
         next(error)
     }
@@ -38,21 +41,9 @@ const check = async(req, res, next) => {
     }
 }
 
-const user = async(req, res, next) => {
-    try {
-        const token = req.query.token
-        const filePath = '../views/index.html'
-        const absolutePath = path.resolve(__dirname, filePath)
-        res.sendFile(absolutePath)
-    } catch (error) {
-        next(error)
-    }
-}
-
 module.exports = {
     register,
     login,
     verify,
-    check,
-    user
+    check
 }
