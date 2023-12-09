@@ -18,7 +18,7 @@ const register = async(req, request) => {
     if (checkEmail > 0) throw new ResponseError(400, 'Email sudah digunakan')
     const usernameCantUse = ['admin', 'Admin', 'administrator', 'Administrator', 'superadmin', 'SuperAdmin', 'superadministrator', 'SuperAdministrator']
     const checkUsernameCantUser = usernameCantUse.filter(username => username === validRequest.username)
-    if (checkUsernameCantUser.length > 0) throw new ResponseError(404, 'Username tidak bisa digunakan')
+    if (checkUsernameCantUser.length > 0) throw new ResponseError(400, 'Username sudah digunakan')
     const checkUsername = await User.count({ where: { username: validRequest.username } })
     if (checkUsername > 0) throw new ResponseError(400, 'Username sudah digunakan')
     validRequest.password = await bcrypt.hash(validRequest.password, 10)
@@ -85,14 +85,10 @@ const verify = async request => {
     }
 }
 
-const check = async request => {
-    const validToken = validate(authValidation.tokenValidation, request)
-    const token = await verifyToken(validToken)
-    const searchUser = await User.findOne({ where: { token } })
-    if (!searchUser) throw new ResponseError(404, 'User tidak tersedia')
-    const dataUser = await verifyToken(searchUser.dataValues.token)
-    if (!dataUser) throw new ResponseError(400, 'User tidak tersedia')
-    return searchUser.dataValues.token
+const check = async token => {
+    const validToken = validate(authValidation.tokenValidation, token)
+    const tokenVerify = await verifyToken(validToken)
+    return tokenVerify
 }
 
 module.exports = {

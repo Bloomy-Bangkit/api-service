@@ -16,7 +16,6 @@ const postProductValidation = Joi.object({
 const updateProductValidation = Joi.object({
     nama: Joi.string().max(255).optional().allow(''),
     grade: Joi.string().max(1).optional().allow(''),
-    picture: Joi.string().max(255).optional().allow(''),
     description: Joi.string().max(255).optional().allow(''),
     price: Joi.number().positive().optional().allow(0),
     weight: Joi.number().positive().optional().allow(0)
