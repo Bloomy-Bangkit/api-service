@@ -166,6 +166,13 @@ const getMyProducts = async myUsername => {
     return searchMyProducts
 }
 
+const getTotalMyProducts = async myUsername => {
+    const validMyUsername = validate(productValidation.usernameValidation, myUsername)
+    await checkUserAvaiable(false, validMyUsername)
+    const searchMyProducts = await Product.count({ where: { usernameSeller: myUsername } })
+    return searchMyProducts
+}
+
 const postProduct = async(myUsername, filePath, request) => {
     const validMyUsername = validate(productValidation.usernameValidation, myUsername)
     const validRequest = validate(productValidation.postProductValidation, request)
@@ -260,6 +267,7 @@ module.exports = {
     getProductByName,
     getProductByGrade,
     getMyProducts,
+    getTotalMyProducts,
     postProduct,
     updateProduct,
     updatePhotoProduct,

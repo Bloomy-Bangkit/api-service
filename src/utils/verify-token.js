@@ -8,11 +8,10 @@ const verifyToken = async token => {
         const verifyPromise = new Promise(async(resolve, reject) => {
             jwt.verify(token, process.env.SECRET_KEY, async(error, decoded) => {
                 if (error) {
-                    reject()
-                    throw new ResponseError(401, 'Token expired')
+                    reject(false)
                 }
-                console.log({ decoded })
-                resolve(decoded.email)
+                if (decoded.verify) resolve(decoded.email)
+                reject(false)
             })
         })
         return verifyPromise
