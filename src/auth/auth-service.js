@@ -79,6 +79,7 @@ const verify = async request => {
     searchUser.updatedAt = new Date()
     const updatedUser = await searchUser.save()
     if (!updatedUser) throw new ResponseError(400, 'Gagal verifikasi user')
+    return true
 }
 
 const check = async token => {
