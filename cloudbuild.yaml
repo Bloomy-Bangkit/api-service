@@ -6,39 +6,11 @@ steps:
       - 'access'
       - 'latest'
       - '--secret=DB_NAME'
-    id: 'get-db-name'
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - 'secrets'
-      - 'versions'
-      - 'access'
-      - 'latest'
       - '--secret=DB_USER'
-    id: 'get-db-user'
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - 'secrets'
-      - 'versions'
-      - 'access'
-      - 'latest'
       - '--secret=DB_HOST'
-    id: 'get-db-host'
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - 'secrets'
-      - 'versions'
-      - 'access'
-      - 'latest'
       - '--secret=DB_PASS'
-    id: 'get-db-pass'
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - 'secrets'
-      - 'versions'
-      - 'access'
-      - 'latest'
       - '--secret=DB_PORT'
-    id: 'get-db-port'
+    id: 'get-secrets'
 
 
   - name: gcr.io/cloud-builders/docker
@@ -60,16 +32,10 @@ steps:
       - '--region=us-central1'
       - '--memory=1024Mi'
       - '--allow-unauthenticated'
-      - '--set-env-vars=DB_NAME=$(cat /secret/DB_NAME),DB_USER=$(cat /secret/DB_USER),DB_HOST=$(cat /secret/DB_HOST),DB_PASS=$(cat /secret/DB_PASS),DB_PORT=$(cat /secret/DB_PORT)'
-    volumes:
-      - 'name': 'secrets'
-        path: '/secret'
-    secretEnv:
-      - 'DB_NAME'
-      - 'DB_USER'
-      - 'DB_HOST'
-      - 'DB_PASS'
-      - 'DB_PORT'
+      - '--set-env-vars=DB_NAME=${_DB_NAME},DB_USER=${_DB_USER},DB_HOST=${_DB_HOST},DB_PASS=${_DB_PASS},DB_PORT=${_DB_PORT}'
+    env:
+      - 'CLOUDSDK_CORE_PROJECT=$PROJECT_ID'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
 images:
   - 'gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA'
 logsBucket: 'gs://bangkitcapstone-bloomy-bucket/logs'

@@ -23,7 +23,7 @@ const verify = async(req, res, next) => {
     try {
         const token = req.query.token
         await authService.verify(token)
-        res.redirect('/auth/user')
+        res.redirect(`/auth/user?token=${token}`)
     } catch (error) {
         next(error)
     }
@@ -40,6 +40,7 @@ const check = async(req, res, next) => {
 
 const user = async(req, res, next) => {
     try {
+        const token = req.query.token
         const filePath = '../views/index.html'
         const absolutePath = path.resolve(__dirname, filePath)
         res.sendFile(absolutePath)
