@@ -3,19 +3,62 @@ steps:
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA', '.']
   - name: gcr.io/cloud-builders/docker
     args: ['push', 'gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA']
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    entrypoint: gcloud
+  - name: 'gcr.io/cloud-builders/gcloud'
     args:
-      - run
-      - deploy
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
+      - '--secret=DB_NAME'
+    id: 'get-db-name'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
+      - '--secret=DB_USER'
+    id: 'get-db-user'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
+      - '--secret=DB_HOST'
+    id: 'get-db-host'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
+      - '--secret=DB_PASS'
+    id: 'get-db-pass'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'secrets'
+      - 'versions'
+      - 'access'
+      - 'latest'
+      - '--secret=DB_PORT'
+    id: 'get-db-port'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
       - 'api-service'
-      - '--image'
-      - 'gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA'
-      - '--region'
-      - 'us-central1'
-      - '--memory'
-      - '1024Mi'
+      - '--image=gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA'
+      - '--region=us-central1'
+      - '--memory=1024Mi'
       - '--allow-unauthenticated'
+      - '--set-env-vars=DB_NAME=$DB_NAME,DB_USER=$DB_USER,DB_HOST=$DB_HOST,DB_PASS=$DB_PASS,DB_PORT=$DB_PORT'
+    env:
+      - 'DB_NAME=$_DB_NAME'
+      - 'DB_USER=$_DB_USER'
+      - 'DB_HOST=$_DB_HOST'
+      - 'DB_PASS=$_DB_PASS'
+      - 'DB_PORT=$_DB_PORT'
 images:
   - 'gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA'
 logsBucket: 'gs://bangkitcapstone-bloomy-bucket/logs'
