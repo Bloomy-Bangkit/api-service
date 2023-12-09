@@ -61,8 +61,15 @@ steps:
       - '--memory=1024Mi'
       - '--allow-unauthenticated'
       - '--set-env-vars=DB_NAME=$(cat /secret/DB_NAME),DB_USER=$(cat /secret/DB_USER),DB_HOST=$(cat /secret/DB_HOST),DB_PASS=$(cat /secret/DB_PASS),DB_PORT=$(cat /secret/DB_PORT)'
-      - '--secrets=DB_NAME=/secret/DB_NAME,DB_USER=/secret/DB_USER,DB_HOST=/secret/DB_HOST,DB_PASS=/secret/DB_PASS,DB_PORT=/secret/DB_PORT'
-      - '--volume=secrets:/secret'
+    volumes:
+      - 'name': 'secrets'
+        path: '/secret'
+    secretEnv:
+      - 'DB_NAME'
+      - 'DB_USER'
+      - 'DB_HOST'
+      - 'DB_PASS'
+      - 'DB_PORT'
 images:
   - 'gcr.io/$PROJECT_ID/bloomy:$COMMIT_SHA'
 logsBucket: 'gs://bangkitcapstone-bloomy-bucket/logs'
