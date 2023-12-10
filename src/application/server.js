@@ -1,4 +1,5 @@
 const express = require('express')
+const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
 const modelSync = require('../utils/model-sync.js')
 const sequelize = require('./sequelize.js')
@@ -19,6 +20,18 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000,
+    max: parseInt(process.env.RATE_LIMIT),
+    handler: (req, res) => {
+        return res.status(429).json({
+            error: true,
+            message: 'Terlalu banyak permintaan, silakan coba lagi setelah beberapa saat.'
+        });
+    }
+})
+
+app.use(limiter)
 app.use('/auth', authRoute)
 app.use(userRoute)
 app.use(productRoute)
