@@ -19,7 +19,7 @@ steps:
       - '--cpu=1'
       - '--memory=1024Mi'
       - '--allow-unauthenticated'
-      - '--set-secrets=DB_NAME=db_name:latest,DB_PORT=db_port:latest,DB_USER=db_user:latest,DB_PASS=db_pass:latest,DB_HOST=db_host:latest,CLIENT_ID:client_id:latest,CLIENT_SECRET=client_secret:latest,MY_EMAIL=my_email:latest,RATE_LIMIT=rate_limit:latest,REDIRECT_URI=redirect_uri:latest,REFRESH_TOKEN=refresh_token:latest,SECRET_KEY=secret_key:latest,SECRET_PASSWORD_SUPERADMIN=secret_password_superadmin:latest'
+      - '--set-secrets=DB_NAME=$(gcloud secrets versions access latest --secret=db_name),DB_PORT=$(gcloud secrets versions access latest --secret=db_port),DB_USER=$(gcloud secrets versions access latest --secret=db_user),DB_PASS=$(gcloud secrets versions access latest --secret=db_pass),DB_HOST=$(gcloud secrets versions access latest --secret=db_host),CLIENT_ID:$(gcloud secrets versions access latest --secret=client_id),CLIENT_SECRET=$(gcloud secrets versions access latest --secret=client_secret),MY_EMAIL=$(gcloud secrets versions access latest --secret=my_email),RATE_LIMIT=$(gcloud secrets versions access latest --secret=rate_limit),REDIRECT_URI=$(gcloud secrets versions access latest --secret=redirect_uri),REFRESH_TOKEN=$(gcloud secrets versions access latest --secret=refresh_token),SECRET_KEY=$(gcloud secrets versions access latest --secret=secret_key),SECRET_PASSWORD_SUPERADMIN=$(gcloud secrets versions access latest --secret=secret_password_superadmin)'
 images:
   - 'gcr.io/$PROJECT_ID/bloomy-service-test:$COMMIT_SHA'
 logsBucket: 'gs://bangkitcapstone-bloomy-bucket/logs'
