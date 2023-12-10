@@ -19,7 +19,7 @@ steps:
       - '--cpu=1'
       - '--memory=1024Mi'
       - '--allow-unauthenticated'
-      - '--set-secrets=DB_NAME=projects/$PROJECT_ID/secrets/db_name/versions/latest,DB_PORT=projects/$PROJECT_ID/secrets/db_port/versions/latest,DB_USER=projects/$PROJECT_ID/secrets/db_user/versions/latest,DB_PASS=projects/$PROJECT_ID/secrets/db_pass/versions/latest,DB_HOST=projects/$PROJECT_ID/secrets/db_host/versions/latest,CLIENT_ID=projects/$PROJECT_ID/secrets/client_id/versions/latest,CLIENT_SECRET=projects/$PROJECT_ID/secrets/client_secret/versions/latest,MY_EMAIL=projects/$PROJECT_ID/secrets/my_email/versions/latest,RATE_LIMIT=projects/$PROJECT_ID/secrets/rate_limit/versions/latest,REDIRECT_URI=projects/$PROJECT_ID/secrets/redirect_uri/versions/latest,REFRESH_TOKEN=projects/$PROJECT_ID/secrets/refresh_token/versions/latest,SECRET_KEY=projects/$PROJECT_ID/secrets/secret_key/versions/latest,SECRET_PASSWORD_SUPERADMIN=projects/$PROJECT_ID/secrets/secret_password_superadmin/versions/latest'
+      - '--set-secrets=DB_NAME=db_name:latest,DB_PORT=db_port:latest,DB_USER=db_user:latest,DB_PASS=db_pass:latest,DB_HOST=db_host:latest,CLIENT_ID=client_id:latest,CLIENT_SECRET=client_secret:latest,MY_EMAIL=my_email:latest,RATE_LIMIT=rate_limit:latest,REDIRECT_URI=redirect_uri:latest,REFRESH_TOKEN=refresh_token:latest,SECRET_KEY=secret_key:latest,SECRET_PASSWORD_SUPERADMIN=secret_password_superadmin:latest'
 images:
   - 'gcr.io/$PROJECT_ID/bloomy-service-test:$COMMIT_SHA'
 logsBucket: 'gs://bangkitcapstone-bloomy-bucket/logs'
