@@ -15,7 +15,7 @@ const bucketName = 'bangkitcapstone-bloomy-bucket'
 const getUsers = async myUsername => {
     await checkUserAvaiable(false, myUsername)
     const searchAllUsers = await User.findAll({
-        attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'kota', 'photo', 'description']
+        attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'provinsi', 'kota', 'photo', 'description']
     })
     if (searchAllUsers.length === 0) throw new ResponseError(404, 'Data users tidak tersedia')
     return searchAllUsers
@@ -32,6 +32,7 @@ const getUser = async(myUsername, username) => {
         nama: searchOtherUser.dataValues.nama,
         nohp: searchOtherUser.dataValues.nohp,
         alamat: searchOtherUser.dataValues.alamat,
+        provinsi: searchOtherUser.dataValues.provinsi,
         kota: searchOtherUser.dataValues.kota,
         photo: searchOtherUser.dataValues.photo,
         description: searchOtherUser.dataValues.description,
@@ -47,6 +48,7 @@ const getMyUser = async myUsername => {
         nama: searchUser.dataValues.nama,
         nohp: searchUser.dataValues.nohp,
         alamat: searchUser.dataValues.alamat,
+        provinsi: searchUser.dataValues.provinsi,
         kota: searchUser.dataValues.kota,
         photo: searchUser.dataValues.photo,
         description: searchUser.dataValues.description,
@@ -59,6 +61,7 @@ const updateUser = async(myUsername, request) => {
     searchUser.nama = validRequest.nama
     searchUser.nohp = validRequest.nohp
     searchUser.alamat = validRequest.alamat
+    searchUser.provinsi = validRequest.provinsi
     searchUser.kota = validRequest.kota
     searchUser.description = validRequest.description
     const updatedUser = await searchUser.save()
@@ -69,6 +72,7 @@ const updateUser = async(myUsername, request) => {
         nama: updatedUser.dataValues.nama,
         nohp: updatedUser.dataValues.nohp,
         alamat: updatedUser.dataValues.alamat,
+        provinsi: updatedUser.dataValues.provinsi,
         kota: updatedUser.dataValues.kota,
         description: updatedUser.dataValues.description,
     }

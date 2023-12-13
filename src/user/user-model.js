@@ -40,6 +40,10 @@ const User = sequelize.define('user', {
         type: DataTypes.STRING,
         defaultValue: '',
     },
+    provinsi: {
+        type: DataTypes.STRING,
+        defaultValue: '',
+    },
     kota: {
         type: DataTypes.STRING,
         defaultValue: '',
