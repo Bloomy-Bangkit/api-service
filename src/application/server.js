@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use(rateLimit({
+const limiter = rateLimit({
     windowMs: 1 * 60 * 1000,
     max: parseInt(process.env.RATE_LIMIT),
     handler: (req, res) => {
@@ -31,8 +31,9 @@ app.use(rateLimit({
             message: 'Terlalu banyak permintaan, silakan coba lagi setelah beberapa saat.'
         });
     }
-}))
+})
 
+app.use(limiter)
 app.use('/auth', authRoute)
 app.use(userRoute)
 app.use(productRoute)
