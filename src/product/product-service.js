@@ -10,7 +10,6 @@ const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const productValidation = require('./product-validation.js')
 const checkUserAvaiable = require('../utils/check-user-available.js')
-const checkProductAvailabe = require('../utils/check-product-available.js')
 
 const keyFilename = path.join(__dirname, '../../credentials/bangkitcapstone-bloomy-53eae279350a.json')
 const GCS = new Storage({ keyFilename })
