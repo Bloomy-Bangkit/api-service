@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
 const modelSync = require('../utils/model-sync.js')
@@ -15,9 +16,16 @@ const favoriteRoute = require('../favorite/favorite-route.js')
 const transactionRoute = require('../transaction/transaction-route.js')
 const fishRoute = require('../fish/fish-route.js')
 
-modelSync(false, [sequelize, User, Product, Favorite, Transaction, Fish])
-
 const app = express()
+modelSync(false, [sequelize, User, Product, Favorite, Transaction, Fish])
+app.use(cors({
+    origin: (origin, callback) => {
+        callback(null, true);
+    },
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+}))
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
