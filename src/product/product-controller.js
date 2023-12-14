@@ -134,6 +134,7 @@ module.exports = {
     getProduct,
     getMyProducts,
     getTotalMyProducts,
+    getTotalUsernameProducts,
     postProduct,
     updateProduct,
     updatePhotoProduct,
