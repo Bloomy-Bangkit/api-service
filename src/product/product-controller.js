@@ -56,6 +56,18 @@ const getTotalMyProducts = async(req, res, next) => {
     }
 }
 
+const getTotalUsernameProducts = async(req, res, next) => {
+    try {
+        const myUsername = req.username
+        const username = req.params.username
+        const result = await productService.getTotalUsernameProducts(myUsername, username)
+        res.status(200).json({ error: false, message: 'Berhasil get total my products', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+
 const postProduct = async(req, res, next) => {
     try {
         const myUsername = req.username
