@@ -24,45 +24,32 @@ const getProducts = async myUsername => {
             required: false
         }]
     })
-    const productsWithUserAndFavorite = new Promise(async(resolve, reject) => {
-        try {
-            const products = await Promise.all(
-                searchProducts.map(async(product) => {
-                    const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
-                    const kota = seller.dataValues.kota || 'Kota tidak ada'
-                    product.dataValues.kota = kota
-                    return {...product }
-                })
-            )
-            if (products.length === 0) {
-                reject('No products found.')
-            } else {
-                resolve(products);
-            }
-        } catch (error) {
-            reject(error)
-        }
-    })
-    const finalProduct = await productsWithUserAndFavorite
-    if (finalProduct.length === 0) throw new ResponseError(404, 'Data product tidak tersedia')
-    const products = searchProducts.map(product => ({
-        ...product.toJSON(),
+    const productsWithUserAndFavorite = await Promise.all(
+        searchProducts.map(async product => {
+            const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
+            const kota = seller && seller.dataValues && seller.dataValues.kota ? seller.dataValues.kota : 'Kota tidak ada';
+            product.dataValues.kota = kota
+            return {...product }
+        })
+    )
+    const products = productsWithUserAndFavorite.map(product => ({
+        ...product,
         isFavorite: product.favorites.some(fav => fav.idProduct === product.idProduct && fav.usernameBuyer === validMyUsername),
     }))
     const productsAfterFilter = products.map(product => {
         return {
-            idProduct: product.idProduct,
-            usernameSeller: product.usernameSeller,
-            kota: product.kota,
-            picture: product.picture,
-            nama: product.nama,
-            description: product.description,
-            grade: product.grade,
-            price: product.price,
-            weight: product.weight,
-            createdAt: product.createdAt,
-            updatedAt: product.updatedAt,
-            favorite: product.isFavorite,
+            idProduct: product.dataValues.idProduct,
+            usernameSeller: product.dataValues.usernameSeller,
+            kota: product.dataValues.kota,
+            picture: product.dataValues.picture,
+            nama: product.dataValues.nama,
+            description: product.dataValues.description,
+            grade: product.dataValues.grade,
+            price: product.dataValues.price,
+            weight: product.dataValues.weight,
+            createdAt: product.dataValues.createdAt,
+            updatedAt: product.dataValues.updatedAt,
+            favorite: product.dataValues.isFavorite,
         }
     })
     return productsAfterFilter
@@ -79,45 +66,32 @@ const getProductByUsername = async(myUsername, usernameSeller) => {
         }],
         where: { usernameSeller: validUsernameSeller }
     })
-    const productsWithUserAndFavorite = new Promise(async(resolve, reject) => {
-        try {
-            const products = await Promise.all(
-                searchProducts.map(async(product) => {
-                    const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
-                    const kota = seller.dataValues.kota || 'Kota tidak ada'
-                    product.dataValues.kota = kota
-                    return {...product }
-                })
-            )
-            if (products.length === 0) {
-                reject('No products found.')
-            } else {
-                resolve(products);
-            }
-        } catch (error) {
-            reject(error)
-        }
-    })
-    const finalProduct = await productsWithUserAndFavorite
-    if (finalProduct.length === 0) throw new ResponseError(404, 'Data product tidak tersedia')
-    const products = searchProducts.map(product => ({
-        ...product.toJSON(),
+    const productsWithUserAndFavorite = await Promise.all(
+        searchProducts.map(async product => {
+            const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
+            const kota = seller && seller.dataValues && seller.dataValues.kota ? seller.dataValues.kota : 'Kota tidak ada';
+            product.dataValues.kota = kota
+            return {...product }
+        })
+    )
+    const products = productsWithUserAndFavorite.map(product => ({
+        ...product,
         isFavorite: product.favorites.some(fav => fav.idProduct === product.idProduct && fav.usernameBuyer === validMyUsername),
     }))
     const productsAfterFilter = products.map(product => {
         return {
-            idProduct: product.idProduct,
-            usernameSeller: product.usernameSeller,
-            kota: product.kota,
-            picture: product.picture,
-            nama: product.nama,
-            description: product.description,
-            grade: product.grade,
-            price: product.price,
-            weight: product.weight,
-            createdAt: product.createdAt,
-            updatedAt: product.updatedAt,
-            favorite: product.isFavorite,
+            idProduct: product.dataValues.idProduct,
+            usernameSeller: product.dataValues.usernameSeller,
+            kota: product.dataValues.kota,
+            picture: product.dataValues.picture,
+            nama: product.dataValues.nama,
+            description: product.dataValues.description,
+            grade: product.dataValues.grade,
+            price: product.dataValues.price,
+            weight: product.dataValues.weight,
+            createdAt: product.dataValues.createdAt,
+            updatedAt: product.dataValues.updatedAt,
+            favorite: product.dataValues.isFavorite,
         }
     })
     return productsAfterFilter
@@ -164,45 +138,32 @@ const getProductByName = async(myUsername, nama) => {
             }
         }
     })
-    const productsWithUserAndFavorite = new Promise(async(resolve, reject) => {
-        try {
-            const products = await Promise.all(
-                searchProducts.map(async(product) => {
-                    const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
-                    const kota = seller.dataValues.kota || 'Kota tidak ada'
-                    product.dataValues.kota = kota
-                    return {...product }
-                })
-            )
-            if (products.length === 0) {
-                reject('No products found.')
-            } else {
-                resolve(products);
-            }
-        } catch (error) {
-            reject(error)
-        }
-    })
-    const finalProduct = await productsWithUserAndFavorite
-    if (finalProduct.length === 0) throw new ResponseError(404, 'Data product tidak tersedia')
-    const products = searchProducts.map(product => ({
-        ...product.toJSON(),
+    const productsWithUserAndFavorite = await Promise.all(
+        searchProducts.map(async product => {
+            const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
+            const kota = seller && seller.dataValues && seller.dataValues.kota ? seller.dataValues.kota : 'Kota tidak ada';
+            product.dataValues.kota = kota
+            return {...product }
+        })
+    )
+    const products = productsWithUserAndFavorite.map(product => ({
+        ...product,
         isFavorite: product.favorites.some(fav => fav.idProduct === product.idProduct && fav.usernameBuyer === validMyUsername),
     }))
     const productsAfterFilter = products.map(product => {
         return {
-            idProduct: product.idProduct,
-            usernameSeller: product.usernameSeller,
-            kota: product.kota,
-            picture: product.picture,
-            nama: product.nama,
-            description: product.description,
-            grade: product.grade,
-            price: product.price,
-            weight: product.weight,
-            createdAt: product.createdAt,
-            updatedAt: product.updatedAt,
-            favorite: product.isFavorite,
+            idProduct: product.dataValues.idProduct,
+            usernameSeller: product.dataValues.usernameSeller,
+            kota: product.dataValues.kota,
+            picture: product.dataValues.picture,
+            nama: product.dataValues.nama,
+            description: product.dataValues.description,
+            grade: product.dataValues.grade,
+            price: product.dataValues.price,
+            weight: product.dataValues.weight,
+            createdAt: product.dataValues.createdAt,
+            updatedAt: product.dataValues.updatedAt,
+            favorite: product.dataValues.isFavorite,
         }
     })
     return productsAfterFilter
@@ -219,45 +180,32 @@ const getProductByGrade = async(myUsername, grade) => {
         }],
         where: { grade: validGrade }
     })
-    const productsWithUserAndFavorite = new Promise(async(resolve, reject) => {
-        try {
-            const products = await Promise.all(
-                searchProducts.map(async(product) => {
-                    const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
-                    const kota = seller.dataValues.kota || 'Kota tidak ada'
-                    product.dataValues.kota = kota
-                    return {...product }
-                })
-            )
-            if (products.length === 0) {
-                reject('No products found.')
-            } else {
-                resolve(products);
-            }
-        } catch (error) {
-            reject(error)
-        }
-    })
-    const finalProduct = await productsWithUserAndFavorite
-    if (finalProduct.length === 0) throw new ResponseError(404, 'Data product tidak tersedia')
-    const products = searchProducts.map(product => ({
-        ...product.toJSON(),
+    const productsWithUserAndFavorite = await Promise.all(
+        searchProducts.map(async product => {
+            const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
+            const kota = seller && seller.dataValues && seller.dataValues.kota ? seller.dataValues.kota : 'Kota tidak ada';
+            product.dataValues.kota = kota
+            return {...product }
+        })
+    )
+    const products = productsWithUserAndFavorite.map(product => ({
+        ...product,
         isFavorite: product.favorites.some(fav => fav.idProduct === product.idProduct && fav.usernameBuyer === validMyUsername),
     }))
     const productsAfterFilter = products.map(product => {
         return {
-            idProduct: product.idProduct,
-            usernameSeller: product.usernameSeller,
-            kota: product.kota,
-            picture: product.picture,
-            nama: product.nama,
-            description: product.description,
-            grade: product.grade,
-            price: product.price,
-            weight: product.weight,
-            createdAt: product.createdAt,
-            updatedAt: product.updatedAt,
-            favorite: product.isFavorite,
+            idProduct: product.dataValues.idProduct,
+            usernameSeller: product.dataValues.usernameSeller,
+            kota: product.dataValues.kota,
+            picture: product.dataValues.picture,
+            nama: product.dataValues.nama,
+            description: product.dataValues.description,
+            grade: product.dataValues.grade,
+            price: product.dataValues.price,
+            weight: product.dataValues.weight,
+            createdAt: product.dataValues.createdAt,
+            updatedAt: product.dataValues.updatedAt,
+            favorite: product.dataValues.isFavorite,
         }
     })
     return productsAfterFilter
@@ -269,28 +217,15 @@ const getMyProducts = async myUsername => {
     const searchProducts = await Product.findAll({
         where: { usernameSeller: validMyUsername }
     })
-    const productsWithUserAndFavorite = new Promise(async(resolve, reject) => {
-        try {
-            const products = await Promise.all(
-                searchProducts.map(async(product) => {
-                    const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
-                    const kota = seller.dataValues.kota || 'Kota tidak ada'
-                    product.dataValues.kota = kota
-                    return {...product }
-                })
-            )
-            if (products.length === 0) {
-                reject('No products found.')
-            } else {
-                resolve(products);
-            }
-        } catch (error) {
-            reject(error)
-        }
-    })
-    const finalProduct = await productsWithUserAndFavorite
-    if (finalProduct.length === 0) throw new ResponseError(404, 'Data product tidak tersedia')
-    const productsAfterFilter = finalProduct.map(product => {
+    const productsWithUserAndFavorite = await Promise.all(
+        searchProducts.map(async product => {
+            const seller = await User.findOne({ where: { username: product.dataValues.usernameSeller } })
+            const kota = seller && seller.dataValues && seller.dataValues.kota ? seller.dataValues.kota : 'Kota tidak ada';
+            product.dataValues.kota = kota
+            return {...product }
+        })
+    )
+    const productsAfterFilter = productsWithUserAndFavorite.map(product => {
         return {
             idProduct: product.dataValues.idProduct,
             usernameSeller: product.dataValues.usernameSeller,
