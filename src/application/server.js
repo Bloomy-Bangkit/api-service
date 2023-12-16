@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const rateLimit = require('express-rate-limit');
-const bodyParser = require('body-parser');
+const rateLimit = require('express-rate-limit')
+const bodyParser = require('body-parser')
 const modelSync = require('../utils/model-sync.js')
 const sequelize = require('./sequelize.js')
 const User = require('../user/user-model.js')
@@ -20,7 +20,7 @@ const app = express()
 modelSync(false, [sequelize, User, Product, Favorite, Transaction, Fish])
 app.use(cors({
     origin: (origin, callback) => {
-        callback(null, true);
+        callback(null, true)
     },
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
@@ -37,7 +37,7 @@ const limiter = rateLimit({
         return res.status(429).json({
             error: true,
             message: 'Terlalu banyak permintaan, silakan coba lagi setelah beberapa saat.'
-        });
+        })
     }
 })
 

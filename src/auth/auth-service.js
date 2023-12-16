@@ -27,7 +27,7 @@ const register = async(req, request) => {
     const link = `${req.protocol}s://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
     const statusSendEmail = await sendEmailVerify(validRequest.email, link)
     if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
-    const defaultPhoto = 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/user/profile.png'
+    const defaultPhoto = 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/user/profile.jpg'
     const userCreated = await User.create({
         email: validRequest.email,
         username: validRequest.username,
