@@ -45,7 +45,6 @@ const register = async(req, request) => {
     return {
         email: userCreated.email,
         username: userCreated.username,
-        password: userCreated.password,
         verify: 'Check email untuk verifikasi akun'
     }
 }
