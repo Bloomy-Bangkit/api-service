@@ -8,10 +8,10 @@ const getProvinsi = async() => {
 }
 
 const getKota = async namaProvinsi => {
-    const result = dataLocation.find(location => location.provinsi === namaProvinsi)
+    const result = dataLocation.find(location => location.provinsi === namaProvinsi.toUpperCase())
     if (!result) throw new ResponseError(404, 'Data provinsi tidak tersedia')
     if (!result.kota) throw new ResponseError(404, 'Data kota tidak tersedia')
-    return { provinsi: namaProvinsi, kota: result.kota }
+    return { provinsi: namaProvinsi.toUpperCase(), kota: result.kota }
 }
 
 module.exports = {

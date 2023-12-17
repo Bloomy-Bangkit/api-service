@@ -16,6 +16,7 @@ const favoriteRoute = require('../favorite/favorite-route.js')
 const transactionRoute = require('../transaction/transaction-route.js')
 const fishRoute = require('../fish/fish-route.js')
 const locationRoute = require('../location/location-route.js')
+const otherRoute = require('../other/other-route.js')
 
 const app = express()
 modelSync(false, [sequelize, User, Product, Favorite, Transaction, Fish])
@@ -50,6 +51,7 @@ app.use(favoriteRoute)
 app.use(transactionRoute)
 app.use(fishRoute)
 app.use('/location', locationRoute)
+app.use('/other', otherRoute)
 
 app.get('/', (req, res) => {
     return res.status(200).json({
