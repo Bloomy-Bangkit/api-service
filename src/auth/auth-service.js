@@ -23,8 +23,9 @@ const register = async(req, request) => {
     if (checkUsername > 0) throw new ResponseError(400, 'Username sudah digunakan')
     validRequest.password = await bcrypt.hash(validRequest.password, 10)
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const jwtVerifikasiAkun = jwt.sign({ email: validRequest.email, verify: true }, SECRET_KEY, { expiresIn: '1h' })
+    const jwtVerifikasiAkun = jwt.sign({ email: validRequest.email, verify: true }, SECRET_KEY, { expiresIn: '3h' })
     const link = `${req.protocol}s://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
+    console.log({ link })
     const statusSendEmail = await sendEmailVerify(validRequest.email, link)
     if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
     const defaultPhoto = 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/user/profile.jpg'
@@ -61,7 +62,7 @@ const login = async request => {
     const matchPassword = await bcrypt.compare(validRequest.password, password)
     if (!matchPassword) throw new ResponseError(400, 'Email dan Password salah')
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '3d' })
+    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '14d' })
     searchUser.token = token
     searchUser.updatedAt = new Date()
     const updatedUser = await searchUser.save()
