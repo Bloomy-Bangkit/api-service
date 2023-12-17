@@ -11,8 +11,8 @@ const getProvinsi = async(req, res, next) => {
 
 const getKota = async(req, res, next) => {
     try {
-        const namaProvinsi = req.params.nama
-        const result = await locationService.getKota(namaProvinsi)
+        const id = req.params.id
+        const result = await locationService.getKota(id)
         return res.status(200).json({ error: false, message: 'Berhasil get data kota', data: result })
     } catch (error) {
         next(error)

@@ -1,6 +1,7 @@
 const dataLocation = [{
+        id: 10,
         provinsi: 'ACEH',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN SIMEULUE',
             'KABUPATEN ACEH SINGKIL',
             'KABUPATEN ACEH SELATAN',
@@ -27,8 +28,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 11,
         provinsi: 'SUMATERA UTARA',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN NIAS',
             'KABUPATEN MANDAILING NATAL',
             'KABUPATEN TAPANULI SELATAN',
@@ -65,8 +67,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 12,
         provinsi: 'SUMATERA BARAT',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN KEPULAUAN MENTAWAI',
             'KABUPATEN PESISIR SELATAN',
             'KABUPATEN SOLOK',
@@ -89,8 +92,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 13,
         provinsi: 'RIAU',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN KUANTAN SINGINGI',
             'KABUPATEN INDRAGIRI HULU',
             'KABUPATEN INDRAGIRI HILIR',
@@ -106,8 +110,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 14,
         provinsi: 'JAMBI',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN KERINCI',
             'KABUPATEN MERANGIN',
             'KABUPATEN SAROLANGUN',
@@ -122,8 +127,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 15,
         provinsi: 'SUMATERA SELATAN',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN OGAN KOMERING ULU',
             'KABUPATEN OGAN KOMERING ILIR',
             'KABUPATEN MUARA ENIM',
@@ -144,8 +150,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 16,
         provinsi: 'BENGKULU',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN BENGKULU SELATAN',
             'KABUPATEN REJANG LEBONG',
             'KABUPATEN BENGKULU UTARA',
@@ -159,8 +166,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 17,
         provinsi: 'LAMPUNG',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN LAMPUNG BARAT',
             'KABUPATEN TANGGAMUS',
             'KABUPATEN LAMPUNG SELATAN',
@@ -179,8 +187,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 18,
         provinsi: 'KEPULAUAN BANGKA BELITUNG',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN BANGKA',
             'KABUPATEN BELITUNG',
             'KABUPATEN BANGKA BARAT',
@@ -191,8 +200,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 19,
         provinsi: 'KEPULAUAN RIAU',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN KARIMUN',
             'KABUPATEN BINTAN',
             'KABUPATEN NATUNA',
@@ -203,8 +213,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 20,
         provinsi: 'DKI JAKARTA',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN KEPULAUAN SERIBU',
             'KOTA JAKARTA SELATAN',
             'KOTA JAKARTA TIMUR',
@@ -214,8 +225,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 21,
         provinsi: 'JAWA BARAT',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN BOGOR',
             'KABUPATEN SUKABUMI',
             'KABUPATEN CIANJUR',
@@ -246,8 +258,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 22,
         provinsi: 'JAWA TENGAH',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN CILACAP',
             'KABUPATEN BANYUMAS',
             'KABUPATEN PURBALINGGA',
@@ -286,8 +299,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 23,
         provinsi: 'DI YOGYAKARTA',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN KULON PROGO',
             'KABUPATEN BANTUL',
             'KABUPATEN GUNUNG KIDUL',
@@ -296,8 +310,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 24,
         provinsi: 'JAWA TIMUR',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN PACITAN',
             'KABUPATEN PONOROGO',
             'KABUPATEN TRENGGALEK',
@@ -339,8 +354,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 25,
         provinsi: 'BANTEN',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN PANDEGLANG',
             'KABUPATEN LEBAK',
             'KABUPATEN TANGERANG',
@@ -352,8 +368,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 26,
         provinsi: 'BALI',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN JEMBRANA',
             'KABUPATEN TABANAN',
             'KABUPATEN BADUNG',
@@ -366,8 +383,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 27,
         provinsi: 'NUSA TENGGARA BARAT',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN LOMBOK BARAT',
             'KABUPATEN LOMBOK TENGAH',
             'KABUPATEN LOMBOK TIMUR',
@@ -381,8 +399,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 28,
         provinsi: 'NUSA TENGGARA TIMUR',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN SUMBA BARAT',
             'KABUPATEN SUMBA TIMUR',
             'KABUPATEN KUPANG',
@@ -408,8 +427,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 29,
         provinsi: 'KALIMANTAN BARAT',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN SAMBAS',
             'KABUPATEN BENGKAYANG',
             'KABUPATEN LANDAK',
@@ -427,8 +447,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 30,
         provinsi: 'KALIMANTAN TENGAH',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN KOTAWARINGIN BARAT',
             'KABUPATEN KOTAWARINGIN TIMUR',
             'KABUPATEN KAPUAS',
@@ -446,8 +467,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 31,
         provinsi: 'KALIMANTAN SELATAN',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN TANAH LAUT',
             'KABUPATEN KOTA BARU',
             'KABUPATEN BANJAR',
@@ -464,8 +486,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 32,
         provinsi: 'KALIMANTAN TIMUR',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN PASER',
             'KABUPATEN KUTAI BARAT',
             'KABUPATEN KUTAI KARTANEGARA',
@@ -479,8 +502,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 33,
         provinsi: 'KALIMANTAN UTARA',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN MALINAU',
             'KABUPATEN BULUNGAN',
             'KABUPATEN TANA TIDUNG',
@@ -489,8 +513,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 34,
         provinsi: 'SULAWESI UTARA',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN BOLAANG MONGONDOW',
             'KABUPATEN MINAHASA',
             'KABUPATEN KEPULAUAN SANGIHE',
@@ -509,8 +534,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 35,
         provinsi: 'SULAWESI TENGAH',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN BANGGAI KEPULAUAN',
             'KABUPATEN BANGGAI',
             'KABUPATEN MOROWALI',
@@ -527,8 +553,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 36,
         provinsi: 'SULAWESI SELATAN',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN KEPULAUAN SELAYAR',
             'KABUPATEN BULUKUMBA',
             'KABUPATEN BANTAENG',
@@ -556,8 +583,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 37,
         provinsi: 'SULAWESI TENGGARA',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN BUTON',
             'KABUPATEN MUNA',
             'KABUPATEN KONAWE',
@@ -578,8 +606,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 38,
         provinsi: 'GORONTALO',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN BOALEMO',
             'KABUPATEN GORONTALO',
             'KABUPATEN POHUWATO',
@@ -589,8 +618,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 39,
         provinsi: 'SULAWESI BARAT',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN MAJENE',
             'KABUPATEN POLEWALI MANDAR',
             'KABUPATEN MAMASA',
@@ -600,8 +630,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 40,
         provinsi: 'MALUKU',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN MALUKU TENGGARA BARAT',
             'KABUPATEN MALUKU TENGGARA',
             'KABUPATEN MALUKU TENGAH',
@@ -616,8 +647,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 41,
         provinsi: 'MALUKU UTARA',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN HALMAHERA BARAT',
             'KABUPATEN HALMAHERA TENGAH',
             'KABUPATEN KEPULAUAN SULA',
@@ -631,8 +663,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 42,
         provinsi: 'PAPUA BARAT',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN FAKFAK',
             'KABUPATEN KAIMANA',
             'KABUPATEN TELUK WONDAMA',
@@ -649,8 +682,9 @@ const dataLocation = [{
         ]
     },
     {
+        id: 43,
         provinsi: 'PAPUA',
-        kota: [
+        kota_kabupaten: [
             'KABUPATEN MERAUKE',
             'KABUPATEN JAYAWIJAYA',
             'KABUPATEN JAYAPURA',

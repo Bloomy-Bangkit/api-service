@@ -6,6 +6,6 @@ const errorMiddleware = require('../middleware/error-middleware.js')
 const locationRoute = express.Router()
 
 locationRoute.get('/provinsi', authenticateToken, locationController.getProvinsi, errorMiddleware)
-locationRoute.get('/provinsi/:nama/kota', authenticateToken, locationController.getKota, errorMiddleware)
+locationRoute.get('/provinsi/:id/kota', authenticateToken, locationController.getKota, errorMiddleware)
 
 module.exports = locationRoute
