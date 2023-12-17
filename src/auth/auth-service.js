@@ -24,8 +24,7 @@ const register = async(req, request) => {
     validRequest.password = await bcrypt.hash(validRequest.password, 10)
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
     const jwtVerifikasiAkun = jwt.sign({ email: validRequest.email, verify: true }, SECRET_KEY, { expiresIn: '3h' })
-    const link = `${req.protocol}s://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
-    console.log({ link })
+    const link = `${req.protocol}://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
     const statusSendEmail = await sendEmailVerify(validRequest.email, link)
     if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
     const defaultPhoto = 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/user/profile.jpg'
