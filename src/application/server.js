@@ -15,9 +15,12 @@ const productRoute = require('../product/product-route.js')
 const favoriteRoute = require('../favorite/favorite-route.js')
 const transactionRoute = require('../transaction/transaction-route.js')
 const fishRoute = require('../fish/fish-route.js')
+const locationRoute = require('../location/location-route.js')
+const otherRoute = require('../other/other-route.js')
 
 const app = express()
 modelSync(false, [sequelize, User, Product, Favorite, Transaction, Fish])
+
 app.use(cors({
     origin: (origin, callback) => {
         callback(null, true)
@@ -26,28 +29,29 @@ app.use(cors({
     credentials: true,
     optionsSuccessStatus: 204,
 }))
-app.use(express.json())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
 
-const limiter = rateLimit({
+app.use(rateLimit({
     windowMs: 1 * 60 * 1000,
-    max: parseInt(process.env.RATE_LIMIT),
+    max: parseInt(process.env.RATE_LIMIT) || 120,
     handler: (req, res) => {
         return res.status(429).json({
             error: true,
             message: 'Terlalu banyak permintaan, silakan coba lagi setelah beberapa saat.'
         })
     }
-})
+}))
 
-app.use(limiter)
+app.use(express.json())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/auth', authRoute)
 app.use(userRoute)
 app.use(productRoute)
 app.use(favoriteRoute)
 app.use(transactionRoute)
 app.use(fishRoute)
+app.use('/location', locationRoute)
+app.use('/other', otherRoute)
 
 app.get('/', (req, res) => {
     return res.status(200).json({
