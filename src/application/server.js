@@ -53,6 +53,8 @@ app.use(fishRoute)
 app.use('/location', locationRoute)
 app.use('/other', otherRoute)
 
+app.set('trust proxy', true)
+
 app.get('/', (req, res) => {
     return res.status(200).json({
         Message: 'بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',

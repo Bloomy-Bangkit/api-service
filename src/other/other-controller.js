@@ -1,10 +1,13 @@
 const axios = require('axios')
 const ResponseError = require('../error/response-error.js')
 const WEATHER_API_KEY = require('./other-data.js')
+const validate = require('../middleware/validation.js')
+const otherValidation = require('./other-validation.js')
 
 const getCuaca = async(req, res, next) => {
     try {
-        const { lat, long } = req.body
+        const validRequest = validate(otherValidation.cuacaValidation, req.body)
+        const { lat, long } = validRequest
         let result
         for (let i = 0; i < WEATHER_API_KEY.length; i++) {
             result = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY[i]}`)
