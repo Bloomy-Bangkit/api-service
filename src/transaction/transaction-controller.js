@@ -4,7 +4,7 @@ const getTransactions = async(req, res, next) => {
     try {
         const myUsername = req.username
         const result = await transactionService.getTransactions(myUsername)
-        res.status(200).json({ error: false, message: 'Get transactions berhasil', data: result })
+        res.status(200).json({ error: false, message: 'GET Transactions berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -16,10 +16,10 @@ const getTransaction = async(req, res, next) => {
         const { username, id } = req.query
         if (username) {
             const result = await transactionService.getTransactionByUsername(myUsername, username)
-            res.status(200).json({ error: false, message: 'Get transaction by username berhasil', data: result })
+            res.status(200).json({ error: false, message: 'GET Transaction by username berhasil', data: result })
         } else if (id) {
             const result = await transactionService.getTransactionById(myUsername, id)
-            res.status(200).json({ error: false, message: 'Get transaction by id berhasil', data: result })
+            res.status(200).json({ error: false, message: 'GET Transaction by id berhasil', data: result })
         } else {
             throw new ResponseError(400, 'Query dibutuhkan')
         }
@@ -32,7 +32,7 @@ const getMyTransactions = async(req, res, next) => {
     try {
         const myUsername = req.username
         const result = await transactionService.getMyTransactions(myUsername)
-        res.status(200).json({ error: false, message: 'Get my transaction berhasil', data: result })
+        res.status(200).json({ error: false, message: 'GET MY Transaction berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -42,7 +42,7 @@ const getTransactionAsBuyer = async(req, res, next) => {
     try {
         const myUsername = req.username
         const result = await transactionService.getTransactionAsBuyer(myUsername)
-        res.status(200).json({ error: false, message: 'Get transaction sebegai Buyer berhasil', data: result })
+        res.status(200).json({ error: false, message: 'GET Transaction sebagai Buyer berhasil', data: result })
     } catch (error) {
         next(error)
     }
@@ -52,7 +52,7 @@ const getTransactionAsSeller = async(req, res, next) => {
     try {
         const myUsername = req.username
         const result = await transactionService.getTransactionAsSeller(myUsername)
-        res.status(200).json({ error: false, message: 'Get transaction sebegai Seller berhasil', data: result })
+        res.status(200).json({ error: false, message: 'GET Transaction sebagai Seller berhasil', data: result })
     } catch (error) {
         next(error)
     }

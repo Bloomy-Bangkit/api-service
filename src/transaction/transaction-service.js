@@ -81,7 +81,7 @@ const getTransactionAsBuyer = async myUsername => {
     const searchUser = await checkUserAvailable(true, validMyUsername)
     const searchMyTransactionsAsBuyer = await Transaction.findAll({ where: { usernameBuyer: searchUser.dataValues.username } })
     if (searchMyTransactionsAsBuyer.length === 0) throw new ResponseError(404, 'Transaksi tidak tersedia')
-    const newTransactions = transactions.map(transaction => {
+    const newTransactions = searchMyTransactionsAsBuyer.map(transaction => {
         const {...transactionDataValues } = transaction.dataValues
         const plainTransaction = Object.assign({}, transactionDataValues)
         plainTransaction.totalPrice = transactionDataValues.price + transactionDataValues.ongkir
@@ -126,9 +126,9 @@ const postTransaction = async(myUsername, request) => {
             datePickup: validRequest.type === '1' ? request.datePickup : ''
         }, { transaction })
         searchProduct.weight = searchProduct.weight - validRequest.weight
-        const updatedProduct = await searchProduct.save({ transaction })
+        await searchProduct.save({ transaction })
         await transaction.commit()
-        return { postTransaction, updatedProduct }
+        return postTransaction
     } catch (error) {
         await transaction.rollback()
         throw new ResponseError(400, `Rollback, error: ${error.message}`)
