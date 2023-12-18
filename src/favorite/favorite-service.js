@@ -38,9 +38,23 @@ const getFavoriteByIdFavorite = async(myUsername, idFavorite) => {
 const getMyFavorite = async myUsername => {
     const validUsername = await validate(favoriteValidation.usernameValidation, myUsername)
     const searchUser = await checkUserAvaiable(true, validUsername)
-    const searchMyFavorite = await Favorite.findAll({ where: { usernameBuyer: searchUser.dataValues.username } })
+    const searchMyFavorite = await Favorite.findAll({ include: Product, where: { usernameBuyer: searchUser.dataValues.username } })
     if (searchMyFavorite.length === 0) throw new ResponseError(404, 'Favorite tidak tersedia')
-    return searchMyFavorite
+    const newFavorite = searchMyFavorite.map(favorite => {
+        return {
+            idFavorite: favorite.dataValues.idFavorite,
+            idProduct: favorite.dataValues.idProduct,
+            usernameBuyer: favorite.dataValues.usernameBuyer,
+            nama: favorite.dataValues.product.dataValues.nama,
+            picture: favorite.dataValues.product.dataValues.picture,
+            grade: favorite.dataValues.product.dataValues.grade,
+            price: favorite.dataValues.product.dataValues.price,
+            weight: favorite.dataValues.product.dataValues.weight,
+            createdAt: favorite.dataValues.createdAt,
+            updatedAt: favorite.dataValues.updatedAt,
+        }
+    })
+    return newFavorite
 }
 
 const postFavorite = async(myUsername, idProduct) => {
