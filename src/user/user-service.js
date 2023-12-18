@@ -13,7 +13,8 @@ const GCS = new Storage({ keyFilename })
 const bucketName = 'bangkitcapstone-bloomy-bucket'
 
 const getUsers = async myUsername => {
-    await checkUserAvaiable(false, myUsername)
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    await checkUserAvaiable(false, validMyUsername)
     const searchAllUsers = await User.findAll({
         attributes: ['username', 'actived', 'nama', 'nohp', 'alamat', 'provinsi', 'kota', 'photo', 'description']
     })
@@ -22,8 +23,9 @@ const getUsers = async myUsername => {
 }
 
 const getUser = async(myUsername, username) => {
-    await checkUserAvaiable(false, myUsername)
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
     const validUsername = validate(userValidation.usernameValidation, username)
+    await checkUserAvaiable(false, validMyUsername)
     const searchOtherUser = await User.findOne({ where: { username: validUsername } })
     if (!searchOtherUser) throw new ResponseError(404, 'User tidak ditemukan')
     return {
@@ -40,7 +42,8 @@ const getUser = async(myUsername, username) => {
 }
 
 const getMyUser = async myUsername => {
-    const searchUser = await checkUserAvaiable(true, myUsername)
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    const searchUser = await checkUserAvaiable(true, validMyUsername)
     return {
         email: searchUser.dataValues.email,
         username: searchUser.dataValues.username,
@@ -56,8 +59,9 @@ const getMyUser = async myUsername => {
 }
 
 const updateUser = async(myUsername, request) => {
-    const searchUser = await checkUserAvaiable(true, myUsername)
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
     const validRequest = validate(userValidation.updateUserValidation, request)
+    const searchUser = await checkUserAvaiable(true, validMyUsername)
     searchUser.nama = validRequest.nama
     searchUser.nohp = validRequest.nohp
     searchUser.alamat = validRequest.alamat
@@ -79,8 +83,9 @@ const updateUser = async(myUsername, request) => {
 }
 
 const updatePassword = async(myUsername, request) => {
-    const searchUser = await checkUserAvaiable(true, myUsername)
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
     const validRequest = validate(userValidation.updatePasswordValidation, request)
+    const searchUser = await checkUserAvaiable(true, validMyUsername)
     const matchPassword = validRequest.newPassword === validRequest.confirmNewPassword
     if (!matchPassword) throw new ResponseError(400, 'Password salah')
     const checkPasswordUser = await bcrypt.compare(validRequest.oldPassword, searchUser.dataValues.password)
@@ -92,11 +97,12 @@ const updatePassword = async(myUsername, request) => {
 }
 
 const updatePhoto = async(myUsername, filePath) => {
+    const validMyUsername = validate(userValidation.usernameValidation, myUsername)
+    const searchUser = await checkUserAvaiable(true, validMyUsername)
     const fileName = path.basename(filePath)
     const destFileName = `service/user/${fileName}`
     await GCS.bucket(bucketName).upload(filePath, { destination: destFileName, })
     const url = `https://storage.googleapis.com/${bucketName}/${destFileName}`
-    const searchUser = await checkUserAvaiable(true, myUsername)
     searchUser.photo = url
     const updatedUser = await searchUser.save()
     if (!updatedUser) throw new ResponseError(400, 'Update photo gagal')

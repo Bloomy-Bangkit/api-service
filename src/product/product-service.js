@@ -33,10 +33,18 @@ const getProducts = async myUsername => {
             return {...product }
         })
     )
-    const products = productsWithUserAndFavorite.map(product => ({
-        ...product,
-        isFavorite: product.favorites.some(fav => fav.idProduct === product.idProduct && fav.usernameBuyer === validMyUsername),
-    }))
+    const products = productsWithUserAndFavorite.map(product => {
+        return {
+            ...product,
+            dataValues: {
+                ...product.dataValues,
+                isFavorite: product.dataValues.favorites.some(fav => {
+                    return fav.dataValues.idProduct === product.dataValues.idProduct && fav.dataValues.usernameBuyer === validMyUsername
+                })
+            }
+
+        }
+    })
     const productsAfterFilter = products.map(product => {
         return {
             idProduct: product.dataValues.idProduct,
@@ -76,10 +84,18 @@ const getProductByUsername = async(myUsername, usernameSeller) => {
             return {...product }
         })
     )
-    const products = productsWithUserAndFavorite.map(product => ({
-        ...product,
-        isFavorite: product.favorites.some(fav => fav.idProduct === product.idProduct && fav.usernameBuyer === validMyUsername),
-    }))
+    const products = productsWithUserAndFavorite.map(product => {
+        return {
+            ...product,
+            dataValues: {
+                ...product.dataValues,
+                isFavorite: product.dataValues.favorites.some(fav => {
+                    return fav.dataValues.idProduct === product.dataValues.idProduct && fav.dataValues.usernameBuyer === validMyUsername
+                })
+            }
+
+        }
+    })
     const productsAfterFilter = products.map(product => {
         return {
             idProduct: product.dataValues.idProduct,
@@ -149,10 +165,18 @@ const getProductByName = async(myUsername, nama) => {
             return {...product }
         })
     )
-    const products = productsWithUserAndFavorite.map(product => ({
-        ...product,
-        isFavorite: product.favorites.some(fav => fav.idProduct === product.idProduct && fav.usernameBuyer === validMyUsername),
-    }))
+    const products = productsWithUserAndFavorite.map(product => {
+        return {
+            ...product,
+            dataValues: {
+                ...product.dataValues,
+                isFavorite: product.dataValues.favorites.some(fav => {
+                    return fav.dataValues.idProduct === product.dataValues.idProduct && fav.dataValues.usernameBuyer === validMyUsername
+                })
+            }
+
+        }
+    })
     const productsAfterFilter = products.map(product => {
         return {
             idProduct: product.dataValues.idProduct,

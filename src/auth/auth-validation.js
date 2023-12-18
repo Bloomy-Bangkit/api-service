@@ -12,10 +12,10 @@ const loginValidation = Joi.object({
     password: Joi.string().max(255).required()
 })
 
-const tokenValidation = Joi.string().max(255).required()
+const usernameValidation = Joi.string().max(255).required()
 
 module.exports = {
     loginValidation,
     registerValidation,
-    tokenValidation
+    usernameValidation
 }

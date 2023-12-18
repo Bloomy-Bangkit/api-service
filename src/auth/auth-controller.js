@@ -34,7 +34,7 @@ const verify = async(req, res, next) => {
 
 const check = async(req, res, next) => {
     try {
-        const result = await authService.check(req.query.token)
+        const result = await authService.check(req.username)
         res.status(200).json({ error: false, message: 'Token valid', data: result })
     } catch (error) {
         next(error)

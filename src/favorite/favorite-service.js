@@ -66,19 +66,23 @@ const postFavorite = async(myUsername, idProduct) => {
 const deleteFavorites = async myUsername => {}
 
 const deleteFavorite = async(myUsername, idFavorite) => {
+    console.log({ myUsername, idFavorite })
     const validMyUsername = validate(favoriteValidation.usernameValidation, myUsername)
     const validIdFavorite = validate(favoriteValidation.idFavoriteValidation, idFavorite)
     const searchUser = await checkUserAvaiable(true, validMyUsername)
+    console.log({ searchUser })
     const searchFavorite = await Favorite.findOne({
-        where: { idFavorite: validIdFavorite, usernameSeller: searchUser.dataValues.username }
+        where: { idFavorite: validIdFavorite, usernameBuyer: searchUser.dataValues.username }
     })
+    console.log({ searchFavorite })
     if (!searchFavorite) throw new ResponseError(404, 'Favorite tidak tersedia')
-    const deleteFavorite = await Product.destroy({
+    const deleteFavorite = await Favorite.destroy({
         where: {
-            idFavorite: searchUser.dataValues.idFavorite,
-            usernameSeller: searchUser.dataValues.usernameSeller
+            idFavorite: searchFavorite.dataValues.idFavorite,
+            usernameBuyer: searchFavorite.dataValues.usernameBuyer
         }
     })
+    console.log({ deleteFavorite })
     if (deleteFavorite.length === 0) throw new ResponseError(400, 'Gagal delete favorite')
     return { idFavorite: validIdFavorite, isDelete: deleteFavorite === 1 ? true : false }
 }

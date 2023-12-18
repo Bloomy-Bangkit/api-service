@@ -4,9 +4,9 @@ const usernameValidation = Joi.string().max(255).required()
 const idTransactionValidation = Joi.string().max(255).required()
 
 const postTransactionValidation = Joi.object({
-    type: Joi.string().max(1).required(),
     idProduct: Joi.string().max(255).required(),
-    weight: Joi.number().positive().required().allow(0),
+    type: Joi.string().max(1).required(),
+    weight: Joi.number().positive().required().min(1),
     datePickup: Joi.date().optional().allow('')
 })
 

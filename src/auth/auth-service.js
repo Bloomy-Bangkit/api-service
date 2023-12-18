@@ -5,7 +5,6 @@ const authValidation = require('./auth-validation.js')
 const validate = require('../middleware/validation.js')
 const ResponseError = require('../error/response-error.js')
 const sendEmailVerify = require('../utils/nodemailer.js')
-const verifyToken = require('../utils/verify-token.js')
 const User = require('../user/user-model.js')
 
 const register = async(req, request) => {
@@ -45,7 +44,6 @@ const register = async(req, request) => {
     return {
         email: userCreated.email,
         username: userCreated.username,
-        password: userCreated.password,
         verify: 'Check email untuk verifikasi akun'
     }
 }
@@ -82,10 +80,11 @@ const verify = async request => {
     return true
 }
 
-const check = async token => {
-    const validToken = validate(authValidation.tokenValidation, token)
-    const tokenVerify = await verifyToken(validToken)
-    return tokenVerify
+const check = async myUsername => {
+    const validMyUsername = validate(authValidation.usernameValidation, myUsername)
+    const searchUser = await User.findOne({ where: { username: validMyUsername } })
+    if (!searchUser) throw new ResponseError(400, 'User tidak ada')
+    return true
 }
 
 module.exports = {
