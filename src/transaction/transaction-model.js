@@ -38,7 +38,7 @@ const Transaction = sequelize.define('transaction', {
     },
     noResi: {
         type: DataTypes.STRING,
-        defaultValue: "",
+        defaultValue: null,
         allowNull: true
     },
     ongkir: {
