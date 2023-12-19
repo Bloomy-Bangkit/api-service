@@ -123,7 +123,7 @@ const postTransaction = async(myUsername, request) => {
             price: searchProduct.dataValues.price * validRequest.weight,
             type: validRequest.type,
             status: defaultStatus,
-            datePickup: validRequest.type === '1' ? request.datePickup : ''
+            datePickup: validRequest.type === '1' ? request.datePickup : null
         }, { transaction })
         searchProduct.weight = searchProduct.weight - validRequest.weight
         await searchProduct.save({ transaction })
