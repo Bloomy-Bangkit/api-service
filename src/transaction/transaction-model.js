@@ -38,7 +38,8 @@ const Transaction = sequelize.define('transaction', {
     },
     noResi: {
         type: DataTypes.STRING,
-        defaultValue: "",
+        defaultValue: null,
+        allowNull: true
     },
     ongkir: {
         type: DataTypes.INTEGER,
@@ -46,6 +47,7 @@ const Transaction = sequelize.define('transaction', {
     },
     datePickup: {
         type: DataTypes.DATE,
+        allowNull: true
     },
     createdAt: {
         type: DataTypes.DATE,
