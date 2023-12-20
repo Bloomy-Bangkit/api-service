@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const util = require('util')
 const jwt = require('jsonwebtoken')
 const validator = require('validator')
 const authValidation = require('./auth-validation.js')
@@ -69,15 +70,22 @@ const login = async request => {
 
 const verify = async request => {
     const validToken = validate(authValidation.tokenValidation, request)
-    const userEmail = await verifyToken(validToken)
-    if (!userEmail) throw new ResponseError(401, 'Token invalid')
-    const searchUser = await User.findOne({ where: { email: userEmail } })
-    if (!searchUser) throw new ResponseError(400, 'User tidak ada')
-    searchUser.actived = true
-    searchUser.updatedAt = new Date()
-    const updatedUser = await searchUser.save()
-    if (!updatedUser) throw new ResponseError(400, 'Gagal verifikasi user')
-    return true
+    const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
+    const verifyAsync = util.promisify(jwt.verify);
+    try {
+        const result = await verifyAsync(validToken, SECRET_KEY)
+        if (!result.verify) throw new ResponseError(400, 'Gagal verifikasi user')
+        const email = result.email
+        const searchUser = await User.findOne({ where: { email } })
+        if (!searchUser) throw new ResponseError(400, 'User tidak ada')
+        searchUser.actived = true
+        searchUser.updatedAt = new Date()
+        const updatedUser = await searchUser.save()
+        if (!updatedUser) throw new ResponseError(400, 'Gagal verifikasi user')
+        return true
+    } catch (error) {
+        throw new ResponseError(400, 'Gagal verifikasi user')
+    }
 }
 
 const check = async myUsername => {
