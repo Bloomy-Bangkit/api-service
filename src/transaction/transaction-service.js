@@ -26,18 +26,23 @@ const getTransactions = async myUsername => {
         if (!searchSeller) throw new ResponseError(400, 'Seller tidak ada')
         return {
             idTransaction: plainTransaction.idTransaction,
-            idProduct: plainTransaction.idProduct,
             weight: plainTransaction.weight,
             price: plainTransaction.price,
             type: plainTransaction.type,
             status: plainTransaction.status,
             noResi: plainTransaction.noResi,
             ongkir: plainTransaction.ongkir,
-            grade: searchProduct.dataValues.grade,
             totalPrice: plainTransaction.price + plainTransaction.ongkir,
             datePickup: plainTransaction.datePickup,
             createdAt: plainTransaction.createdAt,
             updatedAt: plainTransaction.updatedAt,
+            product: {
+                idProduct: plainTransaction.idProduct,
+                grade: searchProduct.dataValues.grade,
+                nama: searchProduct.dataValues.nama,
+                picture: searchProduct.dataValues.picture,
+                pricePerKg: searchProduct.dataValues.price
+            },
             buyer: {
                 usernameBuyer: searchBuyer.dataValues.username,
                 namaBuyer: searchBuyer.dataValues.nama,
@@ -66,16 +71,10 @@ const getTransactionByUsername = async(myUsername, username) => {
         const usernameBuyer = transaction.usernameBuyer
         const searchBuyer = await User.findOne({ where: { username: usernameBuyer } })
         if (!searchBuyer) throw new ResponseError(400, 'Buyer tidak ada')
-        const searchGradeProduct = await Product.findOne({ where: { idProduct: transaction.idProduct } })
-        if (!searchGradeProduct) throw new ResponseError(400, 'Product tidak ada')
-        plainTransaction.usernameBuyer = searchBuyer.dataValues.username
-        plainTransaction.totalPrice = plainTransaction.price + plainTransaction.ongkir
-        plainTransaction.namaBuyer = searchBuyer.dataValues.nama || null
-        plainTransaction.picture = searchBuyer.dataValues.photo
-        plainTransaction.grade = searchGradeProduct.dataValues.grade
+        const searchProduct = await Product.findOne({ where: { idProduct: transaction.idProduct } })
+        if (!searchProduct) throw new ResponseError(400, 'Product tidak ada')
         return {
             idTransaction: plainTransaction.idTransaction,
-            idProduct: plainTransaction.idProduct,
             weight: plainTransaction.weight,
             price: plainTransaction.price,
             type: plainTransaction.type,
@@ -84,13 +83,19 @@ const getTransactionByUsername = async(myUsername, username) => {
             ongkir: plainTransaction.ongkir,
             datePickup: plainTransaction.datePickup,
             totalPrice: plainTransaction.price + plainTransaction.ongkir,
-            grade: plainTransaction.grade,
             createdAt: plainTransaction.createdAt,
             updatedAt: plainTransaction.updatedAt,
+            product: {
+                idProduct: plainTransaction.idProduct,
+                grade: searchProduct.dataValues.grade,
+                nama: searchProduct.dataValues.nama,
+                picture: searchProduct.dataValues.picture,
+                pricePerKg: searchProduct.dataValues.price
+            },
             buyer: {
-                usernameBuyer: plainTransaction.usernameBuyer,
-                namaBuyer: plainTransaction.namaBuyer,
-                picture: plainTransaction.picture,
+                usernameBuyer: searchBuyer.dataValues.username,
+                namaBuyer: searchBuyer.dataValues.nama || null,
+                picture: searchBuyer.dataValues.photo
             }
         }
     }))
@@ -104,14 +109,31 @@ const getTransactionByUsername = async(myUsername, username) => {
         const usernameSeller = searchProduct.dataValues.usernameSeller
         const searchSeller = await User.findOne({ where: { username: usernameSeller } })
         if (!searchSeller) throw new ResponseError(400, 'Seller tidak ada')
-        const seller = {
-            usernameSeller: searchSeller.dataValues.username,
-            namaSeller: searchSeller.dataValues.nama || null,
-            picture: searchSeller.dataValues.photo
+        return {
+            idTransaction: plainTransaction.idTransaction,
+            weight: plainTransaction.weight,
+            price: plainTransaction.price,
+            type: plainTransaction.type,
+            status: plainTransaction.status,
+            noResi: plainTransaction.noResi,
+            ongkir: plainTransaction.ongkir,
+            datePickup: plainTransaction.datePickup,
+            totalPrice: plainTransaction.price + plainTransaction.ongkir,
+            createdAt: plainTransaction.createdAt,
+            updatedAt: plainTransaction.updatedAt,
+            product: {
+                idProduct: plainTransaction.idProduct,
+                grade: searchProduct.dataValues.grade,
+                nama: searchProduct.dataValues.nama,
+                picture: searchProduct.dataValues.picture,
+                pricePerKg: searchProduct.dataValues.price
+            },
+            seller: {
+                usernameSeller: searchSeller.dataValues.username,
+                namaSeller: searchSeller.dataValues.nama || null,
+                picture: searchSeller.dataValues.photo
+            }
         }
-        plainTransaction.grade = searchProduct.dataValues.grade
-        plainTransaction.seller = seller
-        return plainTransaction
     }))
     if (TransactionsAsBuyer.length === 0 && TransactionAsSeller) throw new ResponseError(404, 'Transaksi tidak tersedia')
     if (TransactionsAsBuyer.length === 0) return { seller: TransactionAsSeller, buyer: 'Transaksi tidak tersedia' }
@@ -136,18 +158,23 @@ const getTransactionById = async(myUsername, idTransaction) => {
     if (!searchSeller) throw new ResponseError(400, 'Seller tidak ada')
     return {
         idTransaction: plainTransaction.idTransaction,
-        idProduct: plainTransaction.idProduct,
         weight: plainTransaction.weight,
         price: plainTransaction.price,
         type: plainTransaction.type,
         status: plainTransaction.status,
         noResi: plainTransaction.noResi,
         ongkir: plainTransaction.ongkir,
-        grade: searchProduct.dataValues.grade,
         totalPrice: plainTransaction.price + plainTransaction.ongkir,
         datePickup: plainTransaction.datePickup,
         createdAt: plainTransaction.createdAt,
         updatedAt: plainTransaction.updatedAt,
+        product: {
+            idProduct: plainTransaction.idProduct,
+            grade: searchProduct.dataValues.grade,
+            nama: searchProduct.dataValues.nama,
+            picture: searchProduct.dataValues.picture,
+            pricePerKg: searchProduct.dataValues.price
+        },
         buyer: {
             usernameBuyer: searchBuyer.dataValues.username,
             namaBuyer: searchBuyer.dataValues.nama,
@@ -173,16 +200,10 @@ const getMyTransactions = async myUsername => {
         const usernameBuyer = transaction.usernameBuyer
         const searchBuyer = await User.findOne({ where: { username: usernameBuyer } })
         if (!searchBuyer) throw new ResponseError(400, 'Buyer tidak ada')
-        const searchGradeProduct = await Product.findOne({ where: { idProduct: transaction.idProduct } })
-        if (!searchGradeProduct) throw new ResponseError(400, 'Product tidak ada')
-        plainTransaction.usernameBuyer = searchBuyer.dataValues.username
-        plainTransaction.totalPrice = plainTransaction.price + plainTransaction.ongkir
-        plainTransaction.namaBuyer = searchBuyer.dataValues.nama || null
-        plainTransaction.picture = searchBuyer.dataValues.photo
-        plainTransaction.grade = searchGradeProduct.dataValues.grade
+        const searchProduct = await Product.findOne({ where: { idProduct: transaction.idProduct } })
+        if (!searchProduct) throw new ResponseError(400, 'Product tidak ada')
         return {
             idTransaction: plainTransaction.idTransaction,
-            idProduct: plainTransaction.idProduct,
             weight: plainTransaction.weight,
             price: plainTransaction.price,
             type: plainTransaction.type,
@@ -191,13 +212,19 @@ const getMyTransactions = async myUsername => {
             ongkir: plainTransaction.ongkir,
             datePickup: plainTransaction.datePickup,
             totalPrice: plainTransaction.price + plainTransaction.ongkir,
-            grade: plainTransaction.grade,
             createdAt: plainTransaction.createdAt,
             updatedAt: plainTransaction.updatedAt,
+            product: {
+                idProduct: plainTransaction.idProduct,
+                grade: searchProduct.dataValues.grade,
+                nama: searchProduct.dataValues.nama,
+                picture: searchProduct.dataValues.picture,
+                pricePerKg: searchProduct.dataValues.price
+            },
             buyer: {
-                usernameBuyer: plainTransaction.usernameBuyer,
-                namaBuyer: plainTransaction.namaBuyer,
-                picture: plainTransaction.picture,
+                usernameBuyer: searchBuyer.dataValues.username,
+                namaBuyer: searchBuyer.dataValues.nama || null,
+                picture: searchBuyer.dataValues.photo
             }
         }
     }))
@@ -211,14 +238,31 @@ const getMyTransactions = async myUsername => {
         const usernameSeller = searchProduct.dataValues.usernameSeller
         const searchSeller = await User.findOne({ where: { username: usernameSeller } })
         if (!searchSeller) throw new ResponseError(400, 'Seller tidak ada')
-        const seller = {
-            usernameSeller: searchSeller.dataValues.username,
-            namaSeller: searchSeller.dataValues.nama || null,
-            picture: searchSeller.dataValues.photo
+        return {
+            idTransaction: plainTransaction.idTransaction,
+            weight: plainTransaction.weight,
+            price: plainTransaction.price,
+            type: plainTransaction.type,
+            status: plainTransaction.status,
+            noResi: plainTransaction.noResi,
+            ongkir: plainTransaction.ongkir,
+            datePickup: plainTransaction.datePickup,
+            totalPrice: plainTransaction.price + plainTransaction.ongkir,
+            createdAt: plainTransaction.createdAt,
+            updatedAt: plainTransaction.updatedAt,
+            product: {
+                idProduct: plainTransaction.idProduct,
+                grade: searchProduct.dataValues.grade,
+                nama: searchProduct.dataValues.nama,
+                picture: searchProduct.dataValues.picture,
+                pricePerKg: searchProduct.dataValues.price
+            },
+            seller: {
+                usernameSeller: searchSeller.dataValues.username,
+                namaSeller: searchSeller.dataValues.nama || null,
+                picture: searchSeller.dataValues.photo
+            }
         }
-        plainTransaction.grade = searchProduct.dataValues.grade
-        plainTransaction.seller = seller
-        return plainTransaction
     }))
     if (TransactionsAsBuyer.length === 0 && TransactionAsSeller) throw new ResponseError(404, 'Transaksi tidak tersedia')
     if (TransactionsAsBuyer.length === 0) return { seller: TransactionAsSeller, buyer: 'Transaksi tidak tersedia' }
@@ -236,18 +280,36 @@ const getTransactionAsBuyer = async myUsername => {
         const plainTransaction = {...transactionDataValues }
         plainTransaction.totalPrice = transactionDataValues.price + transactionDataValues.ongkir
         const idProduct = transaction.idProduct
-        const searchSeller = await Product.findOne({ where: { idProduct } })
-        if (!searchSeller) throw new ResponseError(400, 'Seller tidak ada')
-        const usernameSeller = searchSeller.dataValues.usernameSeller
+        const searchProduct = await Product.findOne({ where: { idProduct } })
+        if (!searchProduct) throw new ResponseError(400, 'Seller tidak ada')
+        const usernameSeller = searchProduct.dataValues.usernameSeller
         const searchSellerUser = await User.findOne({ where: { username: usernameSeller } })
         if (!searchSellerUser) throw new ResponseError(400, 'Seller tidak ada')
-        plainTransaction.grade = searchSeller.dataValues.grade
-        plainTransaction.seller = {
-            usernameSeller: searchSellerUser.dataValues.username,
-            namaSeller: searchSellerUser.dataValues.nama || null,
-            picture: searchSellerUser.dataValues.photo
+        return {
+            idTransaction: plainTransaction.idTransaction,
+            weight: plainTransaction.weight,
+            price: plainTransaction.price,
+            type: plainTransaction.type,
+            status: plainTransaction.status,
+            noResi: plainTransaction.noResi,
+            ongkir: plainTransaction.ongkir,
+            datePickup: plainTransaction.datePickup,
+            totalPrice: plainTransaction.price + plainTransaction.ongkir,
+            createdAt: plainTransaction.createdAt,
+            updatedAt: plainTransaction.updatedAt,
+            product: {
+                idProduct: plainTransaction.idProduct,
+                grade: searchProduct.dataValues.grade,
+                nama: searchProduct.dataValues.nama,
+                picture: searchProduct.dataValues.picture,
+                pricePerKg: searchProduct.dataValues.price
+            },
+            seller: {
+                usernameSeller: searchSellerUser.dataValues.username,
+                namaSeller: searchSellerUser.dataValues.nama || null,
+                picture: searchSellerUser.dataValues.photo
+            }
         }
-        return plainTransaction
     }))
     return newTransactions
 }
@@ -265,15 +327,10 @@ const getTransactionAsSeller = async myUsername => {
         const usernameBuyer = transaction.usernameBuyer
         const searchBuyer = await User.findOne({ where: { username: usernameBuyer } })
         if (!searchBuyer) throw new ResponseError(400, 'Buyer tidak ada')
-        const searchGradeProduct = await Product.findOne({ where: { idProduct: transaction.idProduct } })
-        if (!searchGradeProduct) throw new ResponseError(400, 'Product tidak ada')
-        plainTransaction.usernameBuyer = searchBuyer.dataValues.username
-        plainTransaction.namaBuyer = searchBuyer.dataValues.nama || null
-        plainTransaction.picture = searchBuyer.dataValues.photo
-        plainTransaction.grade = searchGradeProduct.dataValues.grade
+        const searchProduct = await Product.findOne({ where: { idProduct: transaction.idProduct } })
+        if (!searchProduct) throw new ResponseError(400, 'Product tidak ada')
         return {
             idTransaction: plainTransaction.idTransaction,
-            idProduct: plainTransaction.idProduct,
             weight: plainTransaction.weight,
             price: plainTransaction.price,
             type: plainTransaction.type,
@@ -282,13 +339,19 @@ const getTransactionAsSeller = async myUsername => {
             ongkir: plainTransaction.ongkir,
             datePickup: plainTransaction.datePickup,
             totalPrice: plainTransaction.price + plainTransaction.ongkir,
-            grade: plainTransaction.grade,
             createdAt: plainTransaction.createdAt,
             updatedAt: plainTransaction.updatedAt,
+            product: {
+                idProduct: plainTransaction.idProduct,
+                grade: searchProduct.dataValues.grade,
+                nama: searchProduct.dataValues.nama,
+                picture: searchProduct.dataValues.picture,
+                pricePerKg: searchProduct.dataValues.price
+            },
             buyer: {
-                usernameBuyer: plainTransaction.usernameBuyer,
-                namaBuyer: plainTransaction.namaBuyer,
-                pictureBuyer: plainTransaction.picture,
+                usernameBuyer: searchBuyer.dataValues.username,
+                namaBuyer: searchBuyer.dataValues.nama || null,
+                pictureBuyer: searchBuyer.dataValues.photo
             }
         }
     }))
