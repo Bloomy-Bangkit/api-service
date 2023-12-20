@@ -10,7 +10,7 @@ const checkUserAvaiable = require('../utils/check-user-available.js')
 
 const keyFilename = path.join(__dirname, '../../credentials/sa-gcs.json')
 const GCS = new Storage({ keyFilename })
-const bucketName = proces.env.BUCKET_NAME || 'BUCKET_NAME'
+const bucketName = process.env.BUCKET_NAME || 'BUCKET_NAME'
 
 const getUsers = async myUsername => {
     const validMyUsername = validate(userValidation.usernameValidation, myUsername)
