@@ -68,6 +68,22 @@ const login = async request => {
     return { token }
 }
 
+const verifySend = async(req, email) => {
+    const validEmail = validate(authValidation.emailValidation, email)
+    const isEmail = validator.isEmail(validEmail)
+    if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
+    const searchUser = await User.findOne({ where: { email: validEmail } })
+    if (!searchUser) throw new ResponseError(400, 'User tidak ada')
+    const accountIsActived = searchUser.actived == 1
+    if (accountIsActived) return { status: true, verify: 'Akun sudah aktif' }
+    const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
+    const jwtVerifikasiAkun = jwt.sign({ email: validEmail, verify: true }, SECRET_KEY, { expiresIn: '3h' })
+    const link = `${req.protocol}://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
+    const statusSendEmail = await sendEmailVerify(validEmail, link)
+    if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
+    return { status: false, verify: 'Check email untuk verifikasi akun' }
+}
+
 const verify = async request => {
     const validToken = validate(authValidation.tokenValidation, request)
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
@@ -98,6 +114,7 @@ const check = async myUsername => {
 module.exports = {
     login,
     register,
+    verifySend,
     verify,
     check
 }
