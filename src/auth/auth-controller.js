@@ -19,6 +19,16 @@ const login = async(req, res, next) => {
     }
 }
 
+const verifySend = async(req, res, next) => {
+    try {
+        const email = req.body.email
+        const result = await authService.verifySend(req, email)
+        res.status(200).json({ error: false, message: 'Berhasil mengirimkan link verifikasi akun', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
 const verify = async(req, res, next) => {
     try {
         const token = req.query.token
@@ -44,6 +54,7 @@ const check = async(req, res, next) => {
 module.exports = {
     register,
     login,
+    verifySend,
     verify,
     check
 }
