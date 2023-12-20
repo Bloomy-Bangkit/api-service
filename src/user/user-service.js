@@ -8,9 +8,9 @@ const ResponseError = require('../error/response-error.js')
 const User = require('./user-model.js')
 const checkUserAvaiable = require('../utils/check-user-available.js')
 
-const keyFilename = path.join(__dirname, '../../credentials/bangkitcapstone-bloomy-53eae279350a.json')
+const keyFilename = path.join(__dirname, '../../credentials/sa-gcs.json')
 const GCS = new Storage({ keyFilename })
-const bucketName = 'bangkitcapstone-bloomy-bucket'
+const bucketName = proces.env.BUCKET_NAME || 'BUCKET_NAME'
 
 const getUsers = async myUsername => {
     const validMyUsername = validate(userValidation.usernameValidation, myUsername)

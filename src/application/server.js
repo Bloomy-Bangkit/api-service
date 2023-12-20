@@ -18,9 +18,10 @@ const fishRoute = require('../fish/fish-route.js')
 const locationRoute = require('../location/location-route.js')
 const otherRoute = require('../other/other-route.js')
 
-const app = express()
 modelSync(false, [sequelize, User, Product, Favorite, Transaction, Fish])
 
+const app = express()
+app.set('trust proxy', true)
 app.use(cors({
     origin: (origin, callback) => {
         callback(null, true)
@@ -53,8 +54,6 @@ app.use(transactionRoute)
 app.use(fishRoute)
 app.use('/location', locationRoute)
 app.use('/other', otherRoute)
-
-app.set('trust proxy', true)
 
 app.get('/', (req, res) => {
     return res.status(200).json({
@@ -129,8 +128,6 @@ app.get('/', (req, res) => {
     })
 })
 
-app.all('*', async(req, res) => {
-    return res.redirect('/')
-})
+app.all('*', async(req, res) => res.redirect('/'))
 
 module.exports = app
