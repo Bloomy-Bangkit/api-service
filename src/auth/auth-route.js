@@ -10,5 +10,8 @@ authRoute.post('/login', authController.login, errorMiddleware)
 authRoute.post('/verify/send', authController.verifySend, errorMiddleware)
 authRoute.get('/verify', authController.verify, errorMiddleware)
 authRoute.get('/check', authenticateToken, authController.check, errorMiddleware)
+authRoute.get('/forgot', authController.getForgotPage, errorMiddleware)
+authRoute.post('/forgot/link', authController.getForgotLink, errorMiddleware)
+authRoute.post('/forgot', authController.postForgot, errorMiddleware)
 
 module.exports = authRoute

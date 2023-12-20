@@ -25,7 +25,21 @@ const register = async(req, request) => {
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
     const jwtVerifikasiAkun = jwt.sign({ email: validRequest.email, verify: true }, SECRET_KEY, { expiresIn: '3h' })
     const link = `${req.protocol}://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
-    const statusSendEmail = await sendEmailVerify(validRequest.email, link)
+    const subject = 'Verifikasi Account Bloomy'
+    const text = `Klik link berikut untuk verisikasi akun anda : ${link}`
+    const html = `
+    <body style="font-family: 'Arial', sans-serif; background-color: #f5f5f5; text-align: center; margin: 0; padding: 0;">
+        <div class="container"
+            style="max-width: 100%; margin: 50px auto; background-color: #ffffff; text-align: center; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <h1>Terima kasih sudah mendaftar di Bloomy🐟</h1>
+            <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Klik link berikut untuk
+                melakukan verifikasi akun Bloomy anda</p>
+            <a href="${link}"
+                style="display: inline-block; padding: 10px 20px; text-decoration: none; background-color: #386FA4; color: #ffffff; font-weight: bold; border-radius: 4px;">Verifikasi
+                Akun</a>
+        </div>
+    </body>`
+    const statusSendEmail = await sendEmailVerify(validRequest.email, link, subject, text, html)
     if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
     const defaultPhoto = 'https://storage.googleapis.com/bangkitcapstone-bloomy-bucket/service/user/profile.jpg'
     const userCreated = await User.create({
@@ -79,7 +93,21 @@ const verifySend = async(req, email) => {
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
     const jwtVerifikasiAkun = jwt.sign({ email: validEmail, verify: true }, SECRET_KEY, { expiresIn: '3h' })
     const link = `${req.protocol}://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
-    const statusSendEmail = await sendEmailVerify(validEmail, link)
+    const subject = 'Verifikasi Account Bloomy'
+    const text = `Klik link berikut untuk verisikasi akun anda : ${link}`
+    const html = `
+    <body style="font-family: 'Arial', sans-serif; background-color: #f5f5f5; text-align: center; margin: 0; padding: 0;">
+        <div class="container"
+            style="max-width: 100%; margin: 50px auto; background-color: #ffffff; text-align: center; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <h1>Terima kasih sudah mendaftar di Bloomy🐟</h1>
+            <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Klik link berikut untuk
+                melakukan verifikasi akun Bloomy anda</p>
+            <a href="${link}"
+                style="display: inline-block; padding: 10px 20px; text-decoration: none; background-color: #386FA4; color: #ffffff; font-weight: bold; border-radius: 4px;">Verifikasi
+                Akun</a>
+        </div>
+    </body>`
+    const statusSendEmail = await sendEmailVerify(validEmail, link, subject, text, html)
     if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
     return { status: false, verify: 'Check email untuk verifikasi akun' }
 }
@@ -87,7 +115,7 @@ const verifySend = async(req, email) => {
 const verify = async request => {
     const validToken = validate(authValidation.tokenValidation, request)
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const verifyAsync = util.promisify(jwt.verify);
+    const verifyAsync = util.promisify(jwt.verify)
     try {
         const result = await verifyAsync(validToken, SECRET_KEY)
         if (!result.verify) throw new ResponseError(400, 'Gagal verifikasi user')
@@ -111,10 +139,53 @@ const check = async myUsername => {
     return true
 }
 
+const getForgotLink = async(req, email) => {
+    const validEmail = validate(authValidation.emailValidation, email)
+    const isEmail = validator.isEmail(validEmail)
+    if (!isEmail) throw new ResponseError(400, 'Email tidak valid')
+    const searchUser = await User.findOne({ where: { email: validEmail } })
+    if (!searchUser) throw new ResponseError(400, 'User tidak ada')
+    const accountIsActived = searchUser.actived == 1
+    if (!accountIsActived) throw new ResponseError(400, 'Akun belum aktif')
+    const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
+    const jwtVerifikasiAkun = jwt.sign({ email: validEmail, forgot: true }, SECRET_KEY, { expiresIn: '3h' })
+    const link = `${req.protocol}://${req.get('host')}/auth/forgot?token=${jwtVerifikasiAkun}`
+    const subject = 'Atur Ulang Password'
+    const text = `Klik link berikut untuk mengatur ulang password : ${link}`
+    const html = `
+    <body style="font-family: 'Arial', sans-serif; background-color: #f5f5f5; text-align: center; margin: 0; padding: 0;">
+        <div class="container"
+            style="max-width: 100%; margin: 50px auto; background-color: #ffffff; text-align: center; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <h1>Atur ulang password anda di Platform Bloomy🐟</h1>
+            <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Klik link berikut untuk
+                melakukan pengaturan password kembali</p>
+            <a href="${link}"
+                style="display: inline-block; padding: 10px 20px; text-decoration: none; background-color: #386FA4; color: #ffffff; font-weight: bold; border-radius: 4px;">Ubah Password</a>
+        </div>
+    </body>`
+    const statusSendEmail = await sendEmailVerify(validEmail, link, subject, text, html)
+    if (!statusSendEmail) throw new ResponseError(400, 'Email verifikasi gagal dikirim')
+    return email
+}
+
+const postForgot = async request => {
+    const { email, newPassword, confirmNewPassword } = request
+    const matchPassword = newPassword === confirmNewPassword
+    if (!matchPassword) return false
+    const searchUser = await User.findOne({ where: { email: email } })
+    if (!searchUser) throw new ResponseError(400, 'User tidak ada')
+    searchUser.password = await bcrypt.hash(newPassword, 10)
+    const updatePassword = await searchUser.save()
+    if (!updatePassword) throw new ResponseError(400, 'Password gagal diperbarui')
+    return updatePassword
+}
+
 module.exports = {
     login,
     register,
     verifySend,
     verify,
-    check
+    check,
+    getForgotLink,
+    postForgot
 }

@@ -1,4 +1,6 @@
+const util = require('util')
 const path = require('path')
+const jwt = require('jsonwebtoken')
 const authService = require('./auth-service.js')
 
 const register = async(req, res, next) => {
@@ -34,9 +36,9 @@ const verify = async(req, res, next) => {
         const token = req.query.token
         const isVerify = await authService.verify(token)
         if (!isVerify) throw new ResponseError(400, 'Akun belum diverifikasi')
-        const filePath = '../views/index.html'
+        const filePath = '../views/verify.ejs'
         const absolutePath = path.resolve(__dirname, filePath)
-        res.sendFile(absolutePath)
+        return res.render(absolutePath)
     } catch (error) {
         next(error)
     }
@@ -51,10 +53,47 @@ const check = async(req, res, next) => {
     }
 }
 
+const getForgotLink = async(req, res, next) => {
+    try {
+        const email = req.body.email
+        const result = await authService.getForgotLink(req, email)
+        res.status(200).json({ error: false, message: 'Berhasil mengirimkan link lupa password ke email', data: result })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getForgotPage = async(req, res, next) => {
+    try {
+        const token = req.query.token
+        const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
+        const verifyAsync = util.promisify(jwt.verify)
+        const result = await verifyAsync(token, SECRET_KEY)
+        if (!result.forgot) return res.redirect('https://website-bloomy.vercel.app/')
+        return res.render(path.resolve(__dirname, '../views/forgot.ejs'), { gagal: false, email: result.email })
+    } catch (error) {
+        return res.redirect('https://website-bloomy.vercel.app/')
+    }
+}
+
+
+const postForgot = async(req, res, next) => {
+    try {
+        const result = await authService.postForgot(req.body)
+        if (!result) return res.render(path.resolve(__dirname, '../views/forgot.ejs'), { gagal: true, message: 'Password dan Confirm Password tidak sesuai', email: req.body.email });
+        return res.render(path.resolve(__dirname, '../views/forgot-success.ejs'))
+    } catch (error) {
+        return res.redirect('https://website-bloomy.vercel.app/')
+    }
+}
+
 module.exports = {
     register,
     login,
     verifySend,
     verify,
-    check
+    check,
+    getForgotLink,
+    getForgotPage,
+    postForgot
 }
