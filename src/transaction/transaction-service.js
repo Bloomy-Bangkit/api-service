@@ -137,7 +137,7 @@ const getTransactionByUsername = async(myUsername, username) => {
     }))
     if (TransactionsAsBuyer.length === 0 && TransactionAsSeller) throw new ResponseError(404, 'Transaksi tidak tersedia')
     if (TransactionsAsBuyer.length === 0) return { seller: TransactionAsSeller, buyer: 'Transaksi tidak tersedia' }
-    if (TransactionAsSeller.length === 0) return { buyer: TransactionsAsBuyer, seller: 'Transaksi tidak tersedia' }
+    if (TransactionAsSeller.length === 0) return { seller: 'Transaksi tidak tersedia', buyer: TransactionsAsBuyer }
     return { seller: TransactionAsSeller, buyer: TransactionsAsBuyer }
 }
 
