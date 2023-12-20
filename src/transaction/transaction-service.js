@@ -480,7 +480,7 @@ const deleteTransaction = async(myUsername, idTransaction) => {
     const validIdTransaction = validate(transactionValidation.idTransactionValidation, idTransaction)
     await checkUserAvailable(false, validMyUsername)
     const searchTransaction = await Transaction.findOne({ where: { idTransaction: validIdTransaction } })
-    if (!searchTransaction) throw new ResponseError(404, 'Transaksi tidak tersedia')
+    if (!searchTransaction) throw new ResponseError(400, 'Transaksi tidak tersedia')
     const deletedTransaction = await Transaction.destroy({
         where: {
             idTransaction: searchTransaction.dataValues.idTransaction,

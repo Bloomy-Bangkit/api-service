@@ -73,7 +73,7 @@ const putTransactionAsBuyer = async(req, res, next) => {
         const myUsername = req.username
         const idTransaction = req.params.id
         const result = await transactionService.putTransactionAsBuyer(myUsername, idTransaction, req.body)
-        res.status(200).json({ error: false, message: 'Put transaction sebagai Buyer  berhasil', data: result })
+        res.status(200).json({ error: false, message: 'Put transaction sebagai Buyer berhasil', data: result })
     } catch (error) {
         next(error)
     }
