@@ -21,7 +21,7 @@ const otherRoute = require('../other/other-route.js')
 modelSync(false, [sequelize, User, Product, Favorite, Transaction, Fish])
 
 const app = express()
-app.set('trust proxy', true)
+app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal'])
 app.use(cors({
     origin: (origin, callback) => {
         callback(null, true)
