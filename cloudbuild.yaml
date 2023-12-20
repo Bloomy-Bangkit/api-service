@@ -19,7 +19,7 @@ steps:
       - '--cpu=1'
       - '--memory=1024Mi'
       - '--allow-unauthenticated'
-      - '--set-secrets=DB_NAME=db_name:latest,DB_PORT=db_port:latest,DB_USER=db_user:latest,DB_PASS=db_pass:latest,DB_HOST=db_host:latest,CLIENT_ID=client_id:latest,CLIENT_SECRET=client_secret:latest,MY_EMAIL=my_email:latest,RATE_LIMIT=rate_limit:latest,REDIRECT_URI=redirect_uri:latest,REFRESH_TOKEN=refresh_token:latest,SECRET_KEY=secret_key:latest,SECRET_PASSWORD_SUPERADMIN=secret_password_superadmin:latest'
+      - '--set-secrets=DB_NAME=db_name:latest,DB_PORT=db_port:latest,DB_USER=db_user:latest,DB_PASS=db_pass:latest,DB_HOST=db_host:latest,CLIENT_ID=client_id:latest,CLIENT_SECRET=client_secret:latest,MY_EMAIL=my_email:latest,RATE_LIMIT=rate_limit:latest,REDIRECT_URI=redirect_uri:latest,REFRESH_TOKEN=refresh_token:latest,SECRET_KEY=secret_key:latest,SECRET_PASSWORD_SUPERADMIN=secret_password_superadmin:latest,BUCKET_NAME=bucket_name:latest'
 images:
   - 'gcr.io/$PROJECT_ID/bloomy-service:$COMMIT_SHA'
 logsBucket: 'gs://bangkitcapstone-bloomy-bucket/logs'
