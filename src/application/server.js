@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const cors = require('cors')
 const rateLimit = require('express-rate-limit')
@@ -22,6 +23,8 @@ modelSync(false, [sequelize, User, Product, Favorite, Transaction, Fish])
 
 const app = express()
 app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal'])
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, '../views'))
 app.use(cors({
     origin: (origin, callback) => {
         callback(null, true)
