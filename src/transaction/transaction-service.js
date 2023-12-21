@@ -417,7 +417,7 @@ const putTransactionAsBuyer = async(myUsername, idTransaction, request) => {
         searchTranscation.dataValues.putTransactionAsSeller
     searchTranscation.weight = validRequest.weight ? validRequest.weight : searchTranscation.dataValues.weight
     searchTranscation.type = validRequest.type ? validRequest.type : searchTranscation.dataValues.type
-    searchTranscation.datePickup = validRequest.datePickup && validRequest.type === '0' ? '' : validRequest.datePickup
+    searchTranscation.datePickup = validRequest.datePickup && validRequest.type === '0' ? null : validRequest.datePickup
     const updateTransaction = await searchTranscation.save()
     if (!updateTransaction) throw new ResponseError(400, 'Update transaksi sebagai Buyer gagal')
     const searchNewProduct = await Product.findOne({ where: { idProduct } })

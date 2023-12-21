@@ -23,7 +23,7 @@ const register = async(req, request) => {
     if (checkUsername > 0) throw new ResponseError(400, 'Username sudah digunakan')
     validRequest.password = await bcrypt.hash(validRequest.password, 10)
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const jwtVerifikasiAkun = jwt.sign({ email: validRequest.email, verify: true }, SECRET_KEY, { expiresIn: '3h' })
+    const jwtVerifikasiAkun = jwt.sign({ email: validRequest.email, verify: true }, SECRET_KEY, { expiresIn: '10m' })
     const link = `${req.protocol}://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
     const subject = 'Verifikasi Account Bloomy'
     const text = `Klik link berikut untuk verisikasi akun anda : ${link}`
@@ -91,7 +91,7 @@ const verifySend = async(req, email) => {
     const accountIsActived = searchUser.actived == 1
     if (accountIsActived) return { status: true, verify: 'Akun sudah aktif' }
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const jwtVerifikasiAkun = jwt.sign({ email: validEmail, verify: true }, SECRET_KEY, { expiresIn: '3h' })
+    const jwtVerifikasiAkun = jwt.sign({ email: validEmail, verify: true }, SECRET_KEY, { expiresIn: '10m' })
     const link = `${req.protocol}://${req.get('host')}/auth/verify?token=${jwtVerifikasiAkun}`
     const subject = 'Verifikasi Account Bloomy'
     const text = `Klik link berikut untuk verisikasi akun anda : ${link}`
@@ -148,7 +148,7 @@ const getForgotLink = async(req, email) => {
     const accountIsActived = searchUser.actived == 1
     if (!accountIsActived) throw new ResponseError(400, 'Akun belum aktif')
     const SECRET_KEY = process.env.SECRET_KEY || 'SecretKeyAuth'
-    const jwtVerifikasiAkun = jwt.sign({ email: validEmail, forgot: true }, SECRET_KEY, { expiresIn: '3h' })
+    const jwtVerifikasiAkun = jwt.sign({ email: validEmail, forgot: true }, SECRET_KEY, { expiresIn: '10m' })
     const link = `${req.protocol}://${req.get('host')}/auth/forgot?token=${jwtVerifikasiAkun}`
     const subject = 'Atur Ulang Password'
     const text = `Klik link berikut untuk mengatur ulang password : ${link}`
