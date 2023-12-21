@@ -370,13 +370,13 @@ const postTransaction = async(myUsername, request) => {
     try {
         const postTransaction = await Transaction.create({
             idTransaction: uuidv4(),
-            idProduct: request.idProduct,
+            idProduct: validRequest.idProduct,
             usernameBuyer: searchUser.dataValues.username,
             weight: validRequest.weight,
             price: searchProduct.dataValues.price * validRequest.weight,
-            type: validRequest.type,
+            type: validRequest.type === '1' && validRequest.datePickup ? '1' : '0',
             status: defaultStatus,
-            datePickup: validRequest.type === '1' ? request.datePickup : null
+            datePickup: validRequest.type === '1' && validRequest.datePickup ? validRequest.datePickup : null
         }, { transaction })
         searchProduct.weight = searchProduct.weight - validRequest.weight
         await searchProduct.save({ transaction })
@@ -392,6 +392,7 @@ const putTransactionAsBuyer = async(myUsername, idTransaction, request) => {
     const validMyUsername = validate(transactionValidation.usernameValidation, myUsername)
     const validIdTransaction = validate(transactionValidation.idTransactionValidation, idTransaction)
     const validRequest = validate(transactionValidation.putRequestAsBuyerValidation, request)
+    console.log({ validRequest })
     await checkUserAvailable(false, validMyUsername)
     const searchTranscation = await Transaction.findOne({ include: Product, where: { idTransaction: validIdTransaction, usernameBuyer: validMyUsername } })
     if (!searchTranscation) throw new ResponseError(400, 'Transaksi tidak tersedia')
@@ -416,8 +417,8 @@ const putTransactionAsBuyer = async(myUsername, idTransaction, request) => {
         validRequest.weight * searchTranscation.dataValues.product.dataValues.price :
         searchTranscation.dataValues.putTransactionAsSeller
     searchTranscation.weight = validRequest.weight ? validRequest.weight : searchTranscation.dataValues.weight
-    searchTranscation.type = validRequest.type ? validRequest.type : searchTranscation.dataValues.type
-    searchTranscation.datePickup = validRequest.datePickup && validRequest.type === '0' ? null : validRequest.datePickup
+    searchTranscation.type = validRequest.datePickup && validRequest.type === '1' ? validRequest.type : searchTranscation.dataValues.type
+    searchTranscation.datePickup = validRequest.datePickup && validRequest.type === '1' ? validRequest.datePickup : null
     const updateTransaction = await searchTranscation.save()
     if (!updateTransaction) throw new ResponseError(400, 'Update transaksi sebagai Buyer gagal')
     const searchNewProduct = await Product.findOne({ where: { idProduct } })

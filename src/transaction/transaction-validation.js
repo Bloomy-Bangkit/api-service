@@ -7,13 +7,13 @@ const postTransactionValidation = Joi.object({
     idProduct: Joi.string().max(255).required(),
     type: Joi.string().max(1).required(),
     weight: Joi.number().positive().required().min(1),
-    datePickup: Joi.date().optional().allow('')
+    datePickup: Joi.date().iso().optional().allow('')
 })
 
 const putRequestAsBuyerValidation = Joi.object({
     type: Joi.string().max(1).optional().allow(''),
     weight: Joi.number().positive().optional().allow(0),
-    datePickup: Joi.date().optional().allow('')
+    datePickup: Joi.date().iso().optional().allow('')
 })
 
 const putRequestAsSellerValidation = Joi.object({
