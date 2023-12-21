@@ -484,7 +484,7 @@ const deleteTransaction = async(myUsername, idTransaction) => {
     const deletedTransaction = await Transaction.destroy({
         where: {
             idTransaction: searchTransaction.dataValues.idTransaction,
-            usernameBuyer: searchTransaction.dataValues.validMyUsername,
+            usernameBuyer: searchTransaction.dataValues.usernameBuyer,
             status: '0'
         }
     })
