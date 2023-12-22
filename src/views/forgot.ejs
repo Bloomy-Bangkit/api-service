@@ -14,38 +14,38 @@
 
     <div class="container">
 
-        <div class="card mx-auto p-3" style="width: 50%;">
-            <div class="card-body">
-                <%if (gagal) { %>
-                    <div class="alert alert-danger" role="alert">
-                        Password dan Confirm Password tidak sesuai!
-                    </div>
-                    <% } else { %>
-                        <p></p>
-                        <% } %>
-                            <form action="/auth/forgot" method="POST">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email"
-                                        value="<%= email %>" readonly>
-                                </div>
+        <div class="card-body">
+            <%if (gagal) { %>
+                <div class="alert alert-danger" role="alert">
+                    Password dan Confirm Password tidak sesuai!
+                </div>
+                <% } else { %>
+                    <p></p>
+                    <% } %>
 
-                                <div class="mb-3">
-                                    <label for="newPassword" class="form-label">Password Baru</label>
-                                    <input type="password" class="form-control" id="newPassword" name="newPassword">
-                                </div>
 
-                                <div class="mb-3">
-                                    <label for="confirmNewPassword" class="form-label">Confirmasi Password Baru</label>
-                                    <input type="password" class="form-control" id="confirmNewPassword"
-                                        name="confirmNewPassword">
-                                </div>
+                        <form action="/auth/forgot" method="POST">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="<%= email %>"
+                                    readonly>
+                            </div>
 
-                                <center>
-                                    <button type="submit" class="btn btn-primary px-4 mt-3">Ubah Password</button>
-                                </center>
-                            </form>
-            </div>
+                            <div class="mb-3">
+                                <label for="newPassword" class="form-label">Password Baru</label>
+                                <input type="password" class="form-control" id="newPassword" name="newPassword">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirmNewPassword" class="form-label">Confirmasi Password Baru</label>
+                                <input type="password" class="form-control" id="confirmNewPassword"
+                                    name="confirmNewPassword">
+                            </div>
+
+                            <center>
+                                <button type="submit" class="btn btn-primary px-4 mt-3">Ubah Password</button>
+                            </center>
+                        </form>
         </div>
 
 
